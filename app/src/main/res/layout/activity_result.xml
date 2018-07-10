@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinerLay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.example.a171y005.quizsc.ResultActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/bt_returnTitle"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="115dp"
+            android:text="タイトルへ戻る"
+            app:layout_constraintRight_toLeftOf="@+id/bt_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="26dp"/>
+
+        <Button
+            android:id="@+id/bt_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="34dp"
+            android:text="次の問題"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"/>
+
+        <LinearLayout
+            android:id="@+id/listlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp">
+
+            <ListView
+                android:id="@+id/listtitle"
+                android:layout_width="200dp"
+                android:layout_height="640dp"
+                android:scrollbars="none"
+                android:textAlignment="viewStart"/>
+
+            <ListView
+                android:id="@+id/listans"
+                android:layout_width="200dp"
+                android:layout_height="640dp"
+                android:scrollbars="none"
+                tools:textAlignment="center"/>
+
+            <ListView
+                android:id="@+id/listres"
+                android:layout_width="200dp"
+                android:layout_height="640dp"
+                android:scrollbars="none"
+                android:textAlignment="viewEnd"/>
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
+

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.a171y005.quizsc.AddwordActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="130dp"
+            android:layout_height="61dp"
+            android:layout_marginLeft="40dp"
+            android:onClick="onClick"
+            android:text="戻る"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:layout_editor_absoluteY="793dp"/>
+
+        <Button
+            android:id="@+id/bt_Sr"
+            android:layout_width="147dp"
+            android:layout_height="56dp"
+            android:layout_marginRight="63dp"
+            android:onClick="onClick"
+            android:text="単語一覧"
+            android:textSize="24sp"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_editor_absoluteY="793dp"
+            tools:layout_editor_absoluteX="373dp"/>
+
+        <EditText
+            android:id="@+id/Word"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="単語"
+            android:inputType="textPersonName"
+            android:textAlignment="viewStart"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/btadd"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="@+id/Mean"
+            app:layout_constraintRight_toRightOf="@+id/Mean"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.44"/>
+
+        <EditText
+            android:id="@+id/Mean"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="69dp"
+            android:layout_marginLeft="119dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="単語の意味"
+            android:inputType="textPersonName"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/btadd"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Word"
+            app:layout_constraintVertical_bias="0.39"/>
+
+        <Button
+            android:id="@+id/btadd"
+            android:layout_width="119dp"
+            android:layout_height="68dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:onClick="onClick"
+            android:text="追加"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.618"
+            app:layout_constraintLeft_toLeftOf="@+id/Mean"
+            app:layout_constraintRight_toRightOf="@+id/Mean"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499"/>
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
