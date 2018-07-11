@@ -20,7 +20,7 @@ public class WordActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
-        c = db.rawQuery("Select Title,Ans from quiz_table;",null);
+        c = db.rawQuery("Select Title,Ans from quiz_table order by Title;",null);
         c.moveToFirst();
         for(int i = 0; i < c.getCount(); i++) {
             listadapter.add(c.getString(c.getColumnIndex("Title")));
