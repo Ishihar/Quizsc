@@ -61,7 +61,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('promotion','昇進、促進',0);" );
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('property','性質',0);" );
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('retail','小売り',0);" );
-
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('schedule','予定、日程',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('payday','給料日',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('stockholder','株主',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('validity','有効性、効力',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('valuation','査定。査定額',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('workflow','仕事の流れ',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('workload','仕事量',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('query','質問、疑問',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('transit','輸送、運送',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('startup','新興企業',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('plumber','配管工',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('tariff','関税',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('blizzard','猛吹雪',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('transplant','臓器移植',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('exemption','免除、控除',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('generator','発電機',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('runway','滑走路',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('briefing','報告会、説明会',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('fad','流行',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('intermission','休憩時間、幕間',0);" );
+        db.execSQL("insert into quiz_table(Title,Ans,Clear) values('janitor','管理人、用務員',0);" );
 
     }
 

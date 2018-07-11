@@ -42,21 +42,21 @@
             <ListView
                 android:id="@+id/listtitle"
                 android:layout_width="200dp"
-                android:layout_height="640dp"
+                android:layout_height="match_parent"
                 android:scrollbars="none"
                 android:textAlignment="viewStart"/>
 
             <ListView
                 android:id="@+id/listans"
                 android:layout_width="200dp"
-                android:layout_height="640dp"
+                android:layout_height="match_parent"
                 android:scrollbars="none"
                 tools:textAlignment="center"/>
 
             <ListView
                 android:id="@+id/listres"
                 android:layout_width="200dp"
-                android:layout_height="640dp"
+                android:layout_height="match_parent"
                 android:scrollbars="none"
                 android:textAlignment="viewEnd"/>
         </LinearLayout>
