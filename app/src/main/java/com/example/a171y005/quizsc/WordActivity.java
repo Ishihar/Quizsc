@@ -37,26 +37,21 @@ public class WordActivity extends AppCompatActivity {
         c.close();
         db.close();
 
-        /*list.setOnClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListView listView = (ListView)parent;
-                String item = (String) listView.getItemAtPosition(position);
-                Toast.makeText(WordActivity.this,item,Toast.LENGTH_LONG).show();
-            }
-        });*/
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                String word = (String) listView.getItemAtPosition(position);
+
                 DatabaseHelper dbHelper = new DatabaseHelper(WordActivity.this);
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 Cursor c;
-                c = db.rawQuery("Select Title,Ans from quiz_table where _id = '"+ position + "'order by Title;",null);
+                c = db.rawQuery("Select Title,Ans from quiz_table where Title = '"+ word + "';",null);
                 c.moveToFirst();
-                Log.d("sql","word=" + view.toString());
+                Log.d("sql","word=" + word);
                 builder.setTitle("単語管理");
                 builder.setPositiveButton("OK",null);
-                builder.setMessage("内容");
+                builder.setMessage("内容:" + c.getString(c.getColumnIndex("Title")) + "\n意味:" + c.getString(c.getColumnIndex("Ans")));
                 builder.show();
 
                 c.close();
