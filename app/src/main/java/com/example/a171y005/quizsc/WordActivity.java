@@ -51,7 +51,7 @@ public class WordActivity extends AppCompatActivity {
                 Log.d("sql","word=" + word);
                 builder.setTitle("単語管理");
                 builder.setPositiveButton("OK",null);
-                builder.setMessage("内容:" + c.getString(c.getColumnIndex("Title")) + "\n意味:" + c.getString(c.getColumnIndex("Ans")));
+                builder.setMessage("内容: " + c.getString(c.getColumnIndex("Title")) + "\n意味: " + c.getString(c.getColumnIndex("Ans")));
                 builder.show();
 
                 c.close();

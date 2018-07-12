@@ -61,6 +61,8 @@ public class AddwordActivity extends AppCompatActivity {
                     } else {
                         db.execSQL("Insert into quiz_table(Title,Ans,Clear) values('" + w + "','" + m + "',0);");
                         builder.setMessage(w + "\nデータベースに登録しました。");
+                        word.setText("");
+                        mean.setText("");
                     }
                     builder.setTitle("単語登録");
                     builder.setPositiveButton("OK", null);

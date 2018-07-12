@@ -69,7 +69,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btadd"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Word"
-            app:layout_constraintVertical_bias="0.39"/>
+            app:layout_constraintVertical_bias="0.419"/>
 
         <Button
             android:id="@+id/btadd"
