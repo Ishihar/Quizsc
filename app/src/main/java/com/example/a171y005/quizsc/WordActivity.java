@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WordActivity extends AppCompatActivity {
 
@@ -20,21 +23,30 @@ public class WordActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
+        ArrayList<HashMap<String,String>> list_data = new ArrayList<HashMap<String, String>>();
+        HashMap<String,String> hashMap = new HashMap<String, String>();
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(WordActivity.this);
 
         final ListView list;
-        ArrayAdapter listadapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
+        //ArrayAdapter listadapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
 
         c = db.rawQuery("Select Title,Ans from quiz_table order by Title;",null);
         c.moveToFirst();
         for(int i = 0; i < c.getCount(); i++) {
-            listadapter.add(c.getString(c.getColumnIndex("Title")));
+            hashMap.put("main",c.getString(c.getColumnIndex("Title")));
+            hashMap.put("right",c.getString(c.getColumnIndex("Ans")));
+            list_data.add(new HashMap<String, String>(hashMap));
+            hashMap.clear();
+            //listadapter.add(c.getString(c.getColumnIndex("Title")));
             c.moveToNext();
         }
-        list = (ListView)findViewById(R.id.listview1);
-        list.setAdapter(listadapter);
+        SimpleAdapter sim = new SimpleAdapter(getApplicationContext(),list_data,R.layout.lv_layout,new String[]{"main","right"},new int[]{R.id.word, R.id.mean});
+        list = (ListView)findViewById(R.id.listview);
+        list.setAdapter(sim);
 
         c.close();
+
         db.close();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
