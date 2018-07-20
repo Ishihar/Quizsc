@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-
+    // 引数の選択肢idからデータを抽出する
     private String getChoice(int SelectAns) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -147,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onClick(View v) {       //
-        boolean j;
+    public void onClick(View v) {
         if (((Button) v).getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
             Toast.makeText(this,"正解",Toast.LENGTH_SHORT).show();
             list.add("正解");
@@ -160,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         cntQuestion++;
 
         if(cntQuestion == 10){
+            // 結果画面へ遷移
             Intent intent = new Intent(MainActivity.this,ResultActivity.class);
             intent.putExtra("LIST",list);
 
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             setQuestion();
-
     }
 
     public boolean onKeyDown(int KeyCode, KeyEvent event){
