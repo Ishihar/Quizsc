@@ -18,12 +18,11 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
 
     private final String DB_TableName = "quiz_table";
-    private String Ans0,Ans1,Ans2,Ans3,Anser;           // Ans0~3...選択肢（4つ）Anser...問題の答え（判定用）
-    private String Title;                                  // 問題の単語
+    private String Title,Anser;                                  // 問題の単語
     private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion;                              // 問題表示の為の変数
     private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
     private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();
-    ArrayList<String> list = new ArrayList<>();
+    private ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,28 +32,41 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
-        c = db.rawQuery("select count(*) from " + DB_TableName, null);   // DBから全問題の数を取得
+
+        // DBから全問題の数を取得
+        c = db.rawQuery("select count(*) from " + DB_TableName, null);
         c.moveToFirst();
-        Totalcount = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));    // データの件数をcountに代入する
+
+        // データの全件数をcountに代入する
+        Totalcount = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
         Log.d("DataCount","clear0cnt=" + c.getString(c.getColumnIndex("count(*)")));
 
+        // 選択肢配列の作成（1~全件数）
         for(int i = 1; i <= Totalcount; i++){
             ChoiceSelect.add(i);
         }
+
+        c.close();
+
+        // Clear=0のデータの件数抽出
         c = db.rawQuery("Select count(*) from " + DB_TableName + " where Clear = 0",null);
         c.moveToFirst();
         int zeroclear = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
 
+        // 出題用配列の作成（1~zeroclear)
         for(int i = 1; i <= zeroclear;i++) {
             TitleSelection.add(i);
         }
-        Log.d("DataCount","clear0cnt=" + zeroclear);
+        //Log.d("DataCount","clear0cnt=" + zeroclear);
+
+        // 出題用配列のシャッフル
         Collections.shuffle(TitleSelection);
     }
 
     @Override
     protected void onResume(){             // Activityが表示された際に行う処理
         super.onResume();
+        while(database_check());
         setQuestion();
     }
 
@@ -63,20 +75,27 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
+        // 出題用配列からcntQuestion目の問題(id)を抽出
         SelectQuestion = TitleSelection.get(cntQuestion);
+
         if(Totalcount <= cntQuestion + 1){        // cntQuestionが問題数を超えた場合
             Toast.makeText(this,"問題終了",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this,TitleActivity.class);
             startActivity(intent);
         }
+        // SelectQuestionに該当する問題とその答えを出力
         c = db.rawQuery("select * from " + DB_TableName + " where _id = " + SelectQuestion + " AND Clear = 0;" , null);
         c.moveToFirst();
 
+        // 選択肢用配列のシャッフル
         Collections.shuffle(ChoiceSelect);
+
+        // 3つの選択肢番号(id)の抽出
         SelectAns1 = ChoiceSelect.get(0);
         SelectAns2 = ChoiceSelect.get(1);
         SelectAns3 = ChoiceSelect.get(2);
 
+        // 3つの選択肢番号と出題番号が同じでないかチェック
         if(SelectQuestion == ChoiceSelect.get(0))
             SelectAns1 = ChoiceSelect.get(3);
         else if(SelectQuestion == ChoiceSelect.get(1))
@@ -84,30 +103,27 @@ public class MainActivity extends AppCompatActivity {
         else if(SelectQuestion == ChoiceSelect.get(2))
             SelectAns3 = ChoiceSelect.get(3);
 
-        Title = c.getString(c.getColumnIndex("Title"));     //  DBからTitleを取得
+        // DBからTitle,Ansを取得し結果表示用配列listに代入
+        Title = c.getString(c.getColumnIndex("Title"));
         Anser = c.getString(c.getColumnIndex("Ans"));
         list.add(Title);
         list.add(Anser);
 
+        // ボタン表示配列の作成
         ArrayList<String> RandomChoice = new ArrayList<String>();
         RandomChoice.add(c.getString(c.getColumnIndex("Ans")));
         RandomChoice.add(getChoice(SelectAns1));
         RandomChoice.add(getChoice(SelectAns2));
         RandomChoice.add(getChoice(SelectAns3));
-
         Collections.shuffle(RandomChoice);
-        Ans0 = RandomChoice.get(0);
-        Ans1 = RandomChoice.get(1);
-        Ans2 = RandomChoice.get(2);
-        Ans3 = RandomChoice.get(3);
 
+        // ボタンに選択肢をセット
         ((TextView)findViewById(R.id.textQuestion_Res)).setText(cntQuestion + 1 + " / 10");
-        ((TextView)findViewById(R.id.textQuestion)).setText(Title);     // TextViewに取得したTitleを表示
-        ((Button)findViewById(R.id.button1)).setText(Ans0);     //  Button1~4に取得した選択肢を表示
-        ((Button)findViewById(R.id.button2)).setText(Ans1);
-        ((Button)findViewById(R.id.button3)).setText(Ans2);
-        ((Button)findViewById(R.id.button4)).setText(Ans3);
-
+        ((TextView)findViewById(R.id.textQuestion)).setText(Title);
+        ((Button)findViewById(R.id.button1)).setText(RandomChoice.get(0));
+        ((Button)findViewById(R.id.button2)).setText(RandomChoice.get(1));
+        ((Button)findViewById(R.id.button3)).setText(RandomChoice.get(2));
+        ((Button)findViewById(R.id.button4)).setText(RandomChoice.get(3));
 
         c.close();
         db.close();
@@ -165,6 +181,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public boolean database_check(){
+       DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c;
+        int n_id,max_id;
+
+        // 歯抜け番号の抽出
+        c = db.rawQuery("select min(_id + 1) as id from " + DB_TableName + " where (_id + 1) not in (select _id from " + DB_TableName + ");",null);
+        c.moveToFirst();
+        n_id = Integer.parseInt(c.getString(c.getColumnIndex("id")));
+
+        // id最大値の抽出
+        c = db.rawQuery("select max(_id) as max_id from " + DB_TableName + ";",null);
+        c.moveToFirst();
+        max_id = Integer.parseInt(c.getString(c.getColumnIndex("max_id")));
+
+        // 歯抜けが無かった場合falseを返す
+        if (n_id == max_id + 1){
+            return false;
+        }
+
+        // id最大値を歯抜け番号にUpdate
+        c = db.rawQuery("update " + DB_TableName + " set _id = " + n_id + " where _id = "+ max_id + ";",null);
+        c.moveToFirst();
+        db.close();
+        c.close();
+
+        return true;
+    }
   /*  private void Clear_update() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
