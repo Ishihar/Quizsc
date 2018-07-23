@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -33,15 +32,14 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
-        // DBから全問題の数を取得
+        // DBから全単語の数を取得
         c = db.rawQuery("select count(*) from " + DB_TableName, null);
         c.moveToFirst();
 
-        // データの全件数をcountに代入する
+        // データの全件数をTotalcountに代入する
         Totalcount = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-        Log.d("DataCount","clear0cnt=" + c.getString(c.getColumnIndex("count(*)")));
 
-        // 選択肢配列の作成（1~全件数）
+        // 選択肢id配列の作成（1~全件数）
         for(int i = 1; i <= Totalcount; i++){
             ChoiceSelect.add(i);
         }
@@ -53,20 +51,23 @@ public class MainActivity extends AppCompatActivity {
         c.moveToFirst();
         int zeroclear = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
 
-        // 出題用配列の作成（1~zeroclear)
+        // 出題用id配列の作成（1~zeroclear)
         for(int i = 1; i <= zeroclear;i++) {
             TitleSelection.add(i);
         }
         //Log.d("DataCount","clear0cnt=" + zeroclear);
 
-        // 出題用配列のシャッフル
+        // 出題用id配列のシャッフル
         Collections.shuffle(TitleSelection);
     }
 
     @Override
     protected void onResume(){             // Activityが表示された際に行う処理
         super.onResume();
+
+        // DBに歯抜けが無いかチェック
         while(database_check());
+
         setQuestion();
     }
 
@@ -75,10 +76,11 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
-        // 出題用配列からcntQuestion目の問題(id)を抽出
+        // 出題用id配列から出題するidを抽出
         SelectQuestion = TitleSelection.get(cntQuestion);
 
-        if(Totalcount <= cntQuestion + 1){        // cntQuestionが問題数を超えた場合
+        // cntQuestionが問題数を超えた場合
+        if(Totalcount <= cntQuestion + 1){
             Toast.makeText(this,"問題終了",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this,TitleActivity.class);
             startActivity(intent);
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         c = db.rawQuery("select * from " + DB_TableName + " where _id = " + SelectQuestion + " AND Clear = 0;" , null);
         c.moveToFirst();
 
-        // 選択肢用配列のシャッフル
+        // 選択肢用id配列のシャッフル
         Collections.shuffle(ChoiceSelect);
 
         // 3つの選択肢番号(id)の抽出
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             setQuestion();
     }
 
+    // バックキーが押された時の処理
     public boolean onKeyDown(int KeyCode, KeyEvent event){
         if(KeyCode != KeyEvent.KEYCODE_BACK){
             return super.onKeyDown(KeyCode,event);
