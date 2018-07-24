@@ -9,12 +9,12 @@
     tools:context="com.example.a171y005.quizsc.WordActivity">
 
     <ListView
-            android:id="@+id/listview"
-            android:layout_width="584dp"
-            android:layout_height="48dp"
-            android:divider="@null"
-            android:dividerHeight="20dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp"/>
+        android:id="@+id/listview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="20dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp"/>
 
 </LinearLayout>
