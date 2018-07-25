@@ -6,12 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -20,25 +23,30 @@ import java.util.HashMap;
 
 import static com.example.a171y005.quizsc.R.id.word;
 
-public class WordActivity extends AppCompatActivity {
+public class WordActivity extends AppCompatActivity implements TextWatcher {
 
     private ArrayList<HashMap<String,String>> list_data;
     private SimpleAdapter sim;
-    private String title;
+    private String title,search = "";
     private int pos;
-
+    private HashMap<String,String> hashMap = new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.addTextChangedListener(this);
+        ShowListView(search);
+    }
+
+    private void ShowListView(String sea_str) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-        HashMap<String,String> hashMap = new HashMap<String, String>();
         final ListView list;
+        Cursor c;
 
-        c = db.rawQuery("Select Title,Ans from quiz_table order by Title;",null);
+        c = db.rawQuery("select Title,Ans from quiz_table where Title like '" + sea_str +"%' order by Title;",null);
         c.moveToFirst();
         list_data = new ArrayList<HashMap<String, String>>();
         sim = new SimpleAdapter(getApplicationContext(),list_data,R.layout.lv_layout,new String[]{"main","right"},new int[]{word, R.id.mean});
@@ -56,41 +64,7 @@ public class WordActivity extends AppCompatActivity {
 
         c.close();
         db.close();
-
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int cnt = 0;
-                ListView listView = (ListView) parent;
-                Object item = ((ListView) parent).getItemAtPosition(position);
-                String word1 = item.toString();
-
-                for(int i = 0; i < word1.length(); i++){
-                    String check = word1.substring(i,i+1);
-                    if(check.equals(",")){
-                        break;
-                    }
-                    cnt++;
-                }
-
-                word1 = word1.substring(6,cnt);
-
-                //((String) listView.getItemAtPosition(position));
-
-                DatabaseHelper dbHelper = new DatabaseHelper(WordActivity.this);
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Cursor c;
-                c = db.rawQuery("Select Title,Ans from quiz_table where Title = '" + word1 + "';",null);
-                c.moveToFirst();
-
-               Log.d("sql","word=" + word1);
-
-                c.close();
-                db.close();
-            }
-        });*/
     }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -154,6 +128,7 @@ public class WordActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_main,menu);
+
         return true;
     }
 
@@ -161,12 +136,38 @@ public class WordActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_settings:
-                Log.d("test1","");
+                Cursor c_list;
+                DatabaseHelper dbHelper = new DatabaseHelper(WordActivity.this);
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                c_list = db.rawQuery("Select * from quiz_table order by Title limit 10;", null);
+                c_list.moveToFirst();
+                ShowListView("");
+
                 break;
             case R.id.action_settings2:
                 Log.d("test2","");
                 break;
+
+            case R.id.search_menu_search_view:
+                Log.d("test","検索ボタン" + list_data.get(1));
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        ShowListView(s.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

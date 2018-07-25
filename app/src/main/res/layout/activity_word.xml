@@ -8,10 +8,18 @@
     android:layout_height="wrap_content"
     tools:context="com.example.a171y005.quizsc.WordActivity">
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        />
+
     <ListView
         android:id="@+id/listview"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:divider="@null"
         android:dividerHeight="20dp"
         tools:layout_editor_absoluteX="8dp"

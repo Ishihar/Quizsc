@@ -4,6 +4,11 @@
     tools:context="com.example.a171y005.quizsc.WordActivity"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/search_menu_search_view"
+        android:title="@string/app_name"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="test"
@@ -13,9 +18,4 @@
         android:title="test2"
         android:orderInCategory="200"
         android:showAsAction="never" />
-    <item
-        android:title="@string/app_name"
-        android:id="@+id/search_menu_search_view"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always" />
 </menu>
