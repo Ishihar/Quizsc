@@ -6,8 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -23,20 +22,20 @@ import java.util.HashMap;
 
 import static com.example.a171y005.quizsc.R.id.word;
 
-public class WordActivity extends AppCompatActivity implements TextWatcher {
+public class WordActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private ArrayList<HashMap<String,String>> list_data;
     private SimpleAdapter sim;
     private String title,search = "";
     private int pos;
     private HashMap<String,String> hashMap = new HashMap<String, String>();
+    private SearchView searchv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
         EditText editText = (EditText) findViewById(R.id.editText);
-        editText.addTextChangedListener(this);
         ShowListView(search);
     }
 
@@ -128,6 +127,12 @@ public class WordActivity extends AppCompatActivity implements TextWatcher {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_main,menu);
+        searchv = (SearchView) findViewById(R.id.search_menu_search_view);
+
+        searchv.setIconifiedByDefault(true);
+        searchv.setOnQueryTextListener(this);
+        searchv.setSubmitButtonEnabled(false);
+
 
         return true;
     }
@@ -156,18 +161,15 @@ public class WordActivity extends AppCompatActivity implements TextWatcher {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        ShowListView(s.toString());
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
+    public boolean onQueryTextChange(String newText) {
+        ShowListView(newText);
+        return false;
     }
 }
