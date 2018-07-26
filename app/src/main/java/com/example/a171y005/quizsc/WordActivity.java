@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -29,13 +28,11 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     private String title,search = "";
     private int pos;
     private HashMap<String,String> hashMap = new HashMap<String, String>();
-    private SearchView searchv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
-        EditText editText = (EditText) findViewById(R.id.editText);
         ShowListView(search);
     }
 
@@ -81,9 +78,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         AlertDialog.Builder builder = new AlertDialog.Builder(WordActivity.this);
         int cnt = 0;
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
         title = sim.getItem(info.position).toString();
         for(int i = 0; i < title.length(); i++){
             String check = title.substring(i,i+1);
@@ -95,7 +89,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         title = title.substring(6,cnt);
         pos = info.position;
 
-        Log.d("test","=" + title);
         if(item.getItemId() == 0){
             builder.setTitle("単語削除");
             builder.setMessage(title + "を削除します。");
@@ -127,13 +120,11 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_main,menu);
-        searchv = (SearchView) findViewById(R.id.search_menu_search_view);
 
-        searchv.setIconifiedByDefault(true);
+        // searchViewを取得
+        MenuItem searchItem = menu.findItem(R.id.search_menu_search_view);
+        final SearchView searchv = (SearchView) searchItem.getActionView();
         searchv.setOnQueryTextListener(this);
-        searchv.setSubmitButtonEnabled(false);
-
-
         return true;
     }
 
@@ -153,10 +144,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
             case R.id.action_settings2:
                 Log.d("test2","");
                 break;
-
-            case R.id.search_menu_search_view:
-                Log.d("test","検索ボタン" + list_data.get(1));
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -170,6 +157,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         ShowListView(newText);
-        return false;
+        return true;
     }
 }
