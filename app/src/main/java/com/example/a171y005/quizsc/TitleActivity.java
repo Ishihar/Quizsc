@@ -21,7 +21,7 @@ public class TitleActivity extends AppCompatActivity {
                 startActivity(intent);
         }
         else if(v.getId() == R.id.bt_add){
-            Intent intent = new Intent(TitleActivity.this,AddwordActivity.class);
+            Intent intent = new Intent(TitleActivity.this,WordActivity.class);
             startActivity(intent);
         }
         finish();

@@ -69,7 +69,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         if(v.getId() == R.id.listview){
             menu.setHeaderTitle("選択");
             menu.add(0,0,0,"削除");
-            menu.add(0,1,0,"修正");
         }
     }
 
@@ -109,11 +108,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
             return true;
         }
-        else if(item.getItemId() == 1){
-            Log.d("test","修正");
-        }
-
-
         return super.onContextItemSelected(item);
     }
 
