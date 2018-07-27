@@ -40,7 +40,7 @@ public class AddwordActivity extends AppCompatActivity {
                 String check,anser = c.getString(c.getColumnIndex("Ans"));
                 int count = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
 
-                if (v.getId() == R.id.btadd) {
+           //     if (v.getId() == R.id.btadd) {
                     if(w.isEmpty() || m.isEmpty()){
                         Toast.makeText(this,"入力欄が空欄です。",Toast.LENGTH_LONG).show();
                         return;
@@ -53,8 +53,6 @@ public class AddwordActivity extends AppCompatActivity {
                             return;
                         }
                     }
-
-
                     if (count >= 1) {
                         message = w + "は既に登録されています。" + "\n" + "登録内容:" + anser;
                         builder.setMessage(message);
@@ -70,17 +68,7 @@ public class AddwordActivity extends AppCompatActivity {
                     c.close();
                     db.close();
                 }
-
-                if(v.getId() == R.id.bt_back){
-                    Intent intent = new Intent(AddwordActivity.this,TitleActivity.class);
-                    startActivity(intent);
-                }
-
-                if(v.getId() == R.id.bt_Sr){
-                    Intent intent = new Intent(AddwordActivity.this,WordActivity.class);
-                    startActivity(intent);
-                }
-        }
+        //}
 
         public boolean onKeyDown(int KeyCode, KeyEvent event){
             if(KeyCode != KeyEvent.KEYCODE_BACK){

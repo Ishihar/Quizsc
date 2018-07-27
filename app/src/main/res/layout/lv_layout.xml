@@ -4,7 +4,7 @@
               android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/word"
+        android:id="@+id/Show_word"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
@@ -16,7 +16,7 @@
         android:textSize="30sp"/>
 
     <TextView
-        android:id="@+id/mean"
+        android:id="@+id/Show_mean"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
