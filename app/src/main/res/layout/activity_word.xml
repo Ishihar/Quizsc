@@ -16,7 +16,4 @@
         android:dividerHeight="20dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"/>
-
-    <include layout="@layout/addlayout" android:id="@+id/include_view"/>
-
 </LinearLayout>

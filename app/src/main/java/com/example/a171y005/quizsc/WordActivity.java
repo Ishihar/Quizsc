@@ -216,5 +216,4 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
             return false;
         }
     }
-
 }

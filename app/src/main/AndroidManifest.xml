@@ -20,8 +20,6 @@
         </activity>
         <activity android:name=".ResultActivity">
         </activity>
-        <activity android:name=".AddwordActivity">
-        </activity>
         <activity android:name=".WordActivity">
         </activity>
     </application>
