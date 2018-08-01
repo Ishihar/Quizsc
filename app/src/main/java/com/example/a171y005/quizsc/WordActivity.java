@@ -145,8 +145,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
                 String editw = edit_Text.getText().toString();
                 String editm = edit_mean.getText().toString();
                 add_mod(editw,editm);
-                edit_mean.setText("");
-                edit_Text.setText("");
                 ShowListView("");
             }
         });

@@ -46,7 +46,7 @@
                 android:scrollbars="none"
                 android:textAlignment="viewStart"
                 android:divider="@null"
-                android:dividerHeight="20dp"/>
+                android:dividerHeight="30dp"/>
             />
 
         </LinearLayout>

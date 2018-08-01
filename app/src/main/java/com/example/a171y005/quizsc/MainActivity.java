@@ -3,8 +3,10 @@ package com.example.a171y005.quizsc;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -150,15 +152,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
-        if (((Button) v).getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
+        Button bt = (Button) v;
+        int cor = Color.red(200);
+        Log.d("Colorint","="+cor);
+        if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
             Toast.makeText(this,"正解",Toast.LENGTH_SHORT).show();
             list.add("正解");
+            bt.setBackgroundColor(cor);
         }
         else{
             Toast.makeText(this,"不正解",Toast.LENGTH_SHORT).show();
             list.add("不正解");
         }
         cntQuestion++;
+        /*try {
+            Thread.sleep(2000); //2000ミリ秒Sleepする
+        } catch (InterruptedException e) {
+        }*/
 
         if(cntQuestion == 10){
             // 結果画面へ遷移
