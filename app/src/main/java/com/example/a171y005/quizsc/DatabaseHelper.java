@@ -21,6 +21,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "Ans text,"
                 + "Clear integer);" );
 
+        db.execSQL(
+                "Create table quiz_log("
+                +   "_id integer primary key autoincrement not null,"
+                +   "date text ,"
+                +   "ans double);" );
+
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('suggestion','提案',0);" );
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('inspection','検査',0);" );
         db.execSQL("insert into quiz_table(Title,Ans,Clear) values('inflation','インフレーション',0);" );
