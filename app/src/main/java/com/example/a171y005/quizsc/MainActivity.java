@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,12 +14,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
     private final String DB_TableName = "quiz_table";
     private String Title,Anser;                                  // 問題の単語
-    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion;                              // 問題表示の為の変数
+    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion,AnserNo;
     private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
     private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();
     private ArrayList<String> list = new ArrayList<>();
@@ -127,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.button3)).setText(RandomChoice.get(2));
         ((Button)findViewById(R.id.button4)).setText(RandomChoice.get(3));
 
+        // 正答のボタン番号の抽出
+        for(int i = 0;i < 3;i++){
+            if(Anser == RandomChoice.get(i)){
+                AnserNo = i;
+                return;
+            }
+        }
+
         c.close();
         db.close();
     }
@@ -149,35 +159,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onClick(View v) {
-        Button bt = (Button) v;
+    public void onClick(final View v) {
+        final Button bt = (Button) v;
+        String btname = "button" + AnserNo;
+        final Button Ans_bt = (Button)findViewById(AnserNo);
+        bt.setBackgroundResource(R.drawable.change);
+
+        final Timer timer = new Timer(true);
+        Handler handle = new Handler();
         if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
+            bt.setBackgroundResource(R.drawable.change);
             Toast.makeText(this,"正解",Toast.LENGTH_SHORT).show();
             list.add("正解");
         }
         else{
+            bt.setBackgroundResource(R.drawable.change2);
+            Ans_bt.setBackgroundResource(R.drawable.change);
             Toast.makeText(this,"不正解",Toast.LENGTH_SHORT).show();
             list.add("不正解");
         }
         cntQuestion++;
-
-        //sleepQuestion();
-
         if(cntQuestion == 10){
             // 結果画面へ遷移
             Intent intent = new Intent(MainActivity.this,ResultActivity.class);
             intent.putExtra("LIST",list);
-
             startActivity(intent);
         }
-        else
-            setQuestion();
-    }
 
-    private void sleepQuestion() {
-        try {
-            Thread.sleep(1000); //2000ミリ秒Sleepする
-        } catch (InterruptedException e) {
+        else {
+            handle.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    bt.setBackgroundResource(R.drawable.shape);
+                    setQuestion();
+                }
+            },1000);
         }
     }
 
