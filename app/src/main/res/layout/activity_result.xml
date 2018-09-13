@@ -14,42 +14,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ListView
+            android:id="@+id/listtitle"
+            android:layout_width="525dp"
+            android:layout_height="669dp"
+            android:divider="@null"
+            android:dividerHeight="30dp"
+            android:scrollbars="none"
+            android:textAlignment="viewStart"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="30dp"/>
+
         <Button
             android:id="@+id/bt_returnTitle"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="115dp"
+            android:layout_marginBottom="54dp"
+            android:layout_marginRight="129dp"
             android:text="タイトルへ戻る"
-            app:layout_constraintRight_toLeftOf="@+id/bt_next"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="26dp"/>
+            app:layout_constraintRight_toLeftOf="@+id/bt_next"
+            android:layout_marginEnd="115dp"/>
 
         <Button
             android:id="@+id/bt_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="34dp"
+            android:layout_marginBottom="27dp"
+            android:layout_marginRight="88dp"
             android:text="次の問題"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp"/>
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="34dp"/>
 
         <LinearLayout
             android:id="@+id/listlayout"
             android:layout_width="wrap_content"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            tools:layout_editor_absoluteY="356dp"
+            tools:layout_editor_absoluteX="0dp"><![CDATA[
 
-            <ListView
-                android:id="@+id/listtitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:textAlignment="viewStart"
-                android:divider="@null"
-                android:dividerHeight="30dp"/>
             />
 
-        </LinearLayout>
+        ]]></LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

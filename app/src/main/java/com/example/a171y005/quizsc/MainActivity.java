@@ -9,12 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -129,14 +130,6 @@ public class MainActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.button3)).setText(RandomChoice.get(2));
         ((Button)findViewById(R.id.button4)).setText(RandomChoice.get(3));
 
-        // 正答のボタン番号の抽出
-        for(int i = 0;i < 3;i++){
-            if(Anser == RandomChoice.get(i)){
-                AnserNo = i;
-                return;
-            }
-        }
-
         c.close();
         db.close();
     }
@@ -161,22 +154,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(final View v) {
         final Button bt = (Button) v;
-        String btname = "button" + AnserNo;
-        final Button Ans_bt = (Button)findViewById(AnserNo);
         bt.setBackgroundResource(R.drawable.change);
+        final ImageView iv = new ImageView(this);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(150,200);
+        lp.leftMargin = 500;
+        lp.topMargin = 100;
 
-        final Timer timer = new Timer(true);
         Handler handle = new Handler();
         if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
             bt.setBackgroundResource(R.drawable.change);
-            Toast.makeText(this,"正解",Toast.LENGTH_SHORT).show();
             list.add("正解");
+            iv.setImageResource(R.drawable.outline_radio_button_unchecked_24);
+            addContentView(iv,lp);
         }
         else{
             bt.setBackgroundResource(R.drawable.change2);
-            Ans_bt.setBackgroundResource(R.drawable.change);
-            Toast.makeText(this,"不正解",Toast.LENGTH_SHORT).show();
             list.add("不正解");
+            iv.setImageResource(R.drawable.baseline_close_24);
+            addContentView(iv,lp);
         }
         cntQuestion++;
         if(cntQuestion == 10){
@@ -191,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     bt.setBackgroundResource(R.drawable.shape);
+                    iv.setImageBitmap(null);
                     setQuestion();
                 }
             },1000);
