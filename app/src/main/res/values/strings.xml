@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Eng_test</string>
+
+    <string-array name="list">
+        <item>問題カテゴリ選択</item>
+        <item>ビジネス</item>
+        <item>生活</item>
+        <item>動物</item>
+        <item>宇宙</item>
+    </string-array>
+
 </resources>

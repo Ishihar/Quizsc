@@ -27,12 +27,14 @@
         android:id="@+id/textQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="5.38"
         android:fontFamily="serif"
         android:gravity="center_vertical|center_horizontal"
         android:text="Title"
+        android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="66dp"
-        android:layout_weight="5.37"/>
+        android:textSize="66sp"
+        android:textStyle="italic"/>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -44,7 +46,7 @@
             android:id="@+id/button1"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -67,7 +69,7 @@
             android:id="@+id/button2"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -89,7 +91,7 @@
             android:id="@+id/button3"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginBottom="32dp"
             android:layout_weight="1"
             android:background="@drawable/shape"
             android:fontFamily="serif"

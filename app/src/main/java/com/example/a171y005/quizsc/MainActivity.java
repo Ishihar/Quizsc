@@ -1,10 +1,12 @@
 package com.example.a171y005.quizsc;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,7 +21,7 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String DB_TableName = "quiz_table";
+    private String DB_TableName;
     private String Title,Anser;                                  // 問題の単語
     private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion,AnserNo;
     private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DB_TableName = getIntent().getStringExtra("DB_NAME");
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
@@ -46,19 +49,12 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 1; i <= Totalcount; i++){
             ChoiceSelect.add(i);
         }
-
-        c.close();
-
-        // Clear=0のデータの件数抽出
-        c = db.rawQuery("Select count(*) from " + DB_TableName + " where Clear = 0",null);
-        c.moveToFirst();
-        int zeroclear = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-
-        // 出題用id配列の作成（1~zeroclear)
-        for(int i = 1; i <= zeroclear;i++) {
+        // 出題用id配列の作成
+        for(int i = 1; i <= Totalcount; i++){
             TitleSelection.add(i);
         }
-        //Log.d("DataCount","clear0cnt=" + zeroclear);
+
+        c.close();
 
         // 出題用id配列のシャッフル
         Collections.shuffle(TitleSelection);
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         // DBに歯抜けが無いかチェック
         while(database_check());
-
+        database_check1();
         setQuestion();
     }
 
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         // SelectQuestionに該当する問題とその答えを出力
-        c = db.rawQuery("select * from " + DB_TableName + " where _id = " + SelectQuestion + " AND Clear = 0;" , null);
+        c = db.rawQuery("select * from " + DB_TableName + " where _id = " + SelectQuestion + ";" , null);
         c.moveToFirst();
 
         // 選択肢用id配列のシャッフル
@@ -153,23 +149,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(final View v) {
+        // 選択したボタンの取得
         final Button bt = (Button) v;
+
+        // Enableする為のボタン取得
+        final Button bt1 = (Button)(findViewById(R.id.button1));
+        final Button bt2 = (Button)(findViewById(R.id.button2));
+        final Button bt3 = (Button)(findViewById(R.id.button3));
+        final Button bt4 = (Button)(findViewById(R.id.button4));
+
+        // どれかボタンが押された場合1000ミリ秒Enableする
+        bt1.setEnabled(false);bt2.setEnabled(false);bt3.setEnabled(false);bt4.setEnabled(false);
+
+        // 選択したボタンの枠線を赤色表示
         bt.setBackgroundResource(R.drawable.change);
+
+        // 〇×表示
         final ImageView iv = new ImageView(this);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(150,200);
-        lp.leftMargin = 500;
-        lp.topMargin = 100;
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(600,600);
+        lp.leftMargin = 300;
+        lp.topMargin = 120;
 
         Handler handle = new Handler();
         if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
             bt.setBackgroundResource(R.drawable.change);
-            list.add("正解");
+            list.add("〇");
             iv.setImageResource(R.drawable.outline_radio_button_unchecked_24);
             addContentView(iv,lp);
         }
         else{
+            // 枠線を青色表示
             bt.setBackgroundResource(R.drawable.change2);
-            list.add("不正解");
+            list.add("×");
             iv.setImageResource(R.drawable.baseline_close_24);
             addContentView(iv,lp);
         }
@@ -182,26 +193,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else {
+            // HandlerクラスからpostDelayedを呼び出し
             handle.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    // 枠線表示を元に戻す
                     bt.setBackgroundResource(R.drawable.shape);
                     iv.setImageBitmap(null);
                     setQuestion();
+                    bt1.setEnabled(true);bt2.setEnabled(true);bt3.setEnabled(true);bt4.setEnabled(true);
                 }
             },1000);
         }
     }
 
     // バックキーが押された時の処理
-    public boolean onKeyDown(int KeyCode, KeyEvent event){
-        if(KeyCode != KeyEvent.KEYCODE_BACK){
-            return super.onKeyDown(KeyCode,event);
+    public boolean onKeyDown(int KeyCode, KeyEvent event) {
+        new AlertDialog.Builder(MainActivity.this).setMessage("中断しますか？").setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MainActivity.this, TitleActivity.class);
+                startActivity(intent);
+            }
+        }).show();
+        return false;
+    }
+
+    public void database_check1(){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c;
+        int one_id;
+
+        // 1の歯抜けの抽出
+        c = db.rawQuery("Select min(_id) from " + DB_TableName + ";",null);
+        c.moveToFirst();
+        one_id = Integer.parseInt(c.getString(c.getColumnIndex("min(_id)")));
+        if(one_id == 2){
+            c = db.rawQuery("Select max(_id) from " + DB_TableName + ";",null);
+            c.moveToFirst();
+            int o_max = Integer.parseInt(c.getString(c.getColumnIndex("max(_id)")));
+            c = db.rawQuery("update " + DB_TableName + " set _id = 1 where _id = " + o_max + ";",null);
+            c.moveToFirst();
         }
-        else{
-            Intent intent = new Intent(MainActivity.this,TitleActivity.class);
-            startActivity(intent);
-            return false;
+        else {
+            return;
         }
     }
 
@@ -209,9 +250,10 @@ public class MainActivity extends AppCompatActivity {
        DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
-        int n_id,max_id;
+        int one_id,n_id,max_id;
 
-        // 歯抜け番号の抽出
+
+        // 2以上の歯抜け番号の抽出
         c = db.rawQuery("select min(_id + 1) as id from " + DB_TableName + " where (_id + 1) not in (select _id from " + DB_TableName + ");",null);
         c.moveToFirst();
         n_id = Integer.parseInt(c.getString(c.getColumnIndex("id")));
@@ -229,27 +271,19 @@ public class MainActivity extends AppCompatActivity {
         // id最大値を歯抜け番号にUpdate
         c = db.rawQuery("update " + DB_TableName + " set _id = " + n_id + " where _id = "+ max_id + ";",null);
         c.moveToFirst();
+
+        /*c = db.rawQuery("Select _id from " + DB_TableName + ";",null);
+        c.moveToFirst();
+        int id = 0;
+        while(id >= 0){
+            id = Integer.parseInt(c.getString(c.getColumnIndex("_id")));
+            Log.d("FILE", String.valueOf(id));
+            c.moveToNext();
+        }*/
         db.close();
         c.close();
 
+
         return true;
     }
-  /*  private void Clear_update() {
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-        c = db.rawQuery("Select _id,Clear from " + DB_TableName + " where _id = " + SelectQuestion,null);
-        c.moveToFirst();
-
-        try {
-            db.execSQL("Update " + DB_TableName + " set Clear = 1 where _id = " + SelectQuestion  + ";");
-        }
-        catch (Exception e){
-            Toast.makeText(this,"update失敗",Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            c.close();
-            db.close();
-        }
-    }*/
 }

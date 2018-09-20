@@ -5,12 +5,13 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/search_menu_search_view"
-        android:title="@string/app_name"
+        android:title="検索"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_add"
+        android:icon="@mipmap/baseline_add_black_48"
         app:showAsAction="always"
         android:title="追加"/>
+
 </menu>

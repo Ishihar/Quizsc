@@ -3,6 +3,7 @@ package com.example.a171y005.quizsc;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        setTitle("学習結果");
         list = getIntent().getStringArrayListExtra("LIST");
         int cnt = 0;
         final ListView listT;
@@ -69,5 +71,17 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
+    public boolean onKeyDown(int KeyCode, KeyEvent event){
+        if(KeyCode != KeyEvent.KEYCODE_BACK){
+            return super.onKeyDown(KeyCode,event);
+        }
+        else{
+            Intent intent = new Intent(ResultActivity.this,TitleActivity.class);
+            startActivity(intent);
+            return false;
+        }
+    }
+
 }
