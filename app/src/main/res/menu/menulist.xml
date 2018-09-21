@@ -27,4 +27,9 @@
         android:title="宇宙"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/item6"
+        android:title="食べ物"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>

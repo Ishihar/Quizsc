@@ -4,15 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.net.URI;
-
 /**
  * Created by 171y005 on 2018/06/13.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private URI uri;
     public DatabaseHelper(Context context){
         super(context,"Eng.db",null,1);
     }
@@ -42,6 +39,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(
                 "Create table quiz_table_C("
+                        + "_id integer primary key autoincrement not null, "
+                        + "Title text ,"
+                        + "Ans text"
+                        + ");");
+
+        db.execSQL(
+                "Create table quiz_table_F("
                         + "_id integer primary key autoincrement not null, "
                         + "Title text ,"
                         + "Ans text"

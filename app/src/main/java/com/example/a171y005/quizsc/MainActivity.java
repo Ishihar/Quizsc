@@ -21,22 +21,27 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String DB_TableName;
-    private String Title,Anser;                                  // 問題の単語
-    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion,AnserNo;
-    private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
-    private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();
-    private ArrayList<String> list = new ArrayList<>();
+    private String DB_TableName;        // カテゴリName（TableName)
+    private String Title,Anser;                                  // 問題の単語,答え
+    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion;     // カテゴリ別全件数,問題カウント,選択肢変数1~3,出題id変数
+    private int c_cnt = 0; // 正解カウント変数
+    private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();   // 出題単語を取得するためのid配列
+    private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();     // 選択肢を取得する為のid配列
+    private ArrayList<String> list = new ArrayList<>();     // ResultActivityへ送信するデータリスト
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DB_TableName = getIntent().getStringExtra("DB_NAME");
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
+
+        // TitleActivityからカテゴリ別テーブル名を取得
+        DB_TableName = getIntent().getStringExtra("Table_NAME");
+
+        // カテゴリ別タイトルの設定
+        setTitle("英単語学習(" + set_Title(DB_TableName) + ")");
 
         // DBから全単語の数を取得
         c = db.rawQuery("select count(*) from " + DB_TableName, null);
@@ -59,11 +64,10 @@ public class MainActivity extends AppCompatActivity {
         // 出題用id配列のシャッフル
         Collections.shuffle(TitleSelection);
     }
-
     @Override
     protected void onResume(){             // Activityが表示された際に行う処理
         super.onResume();
-
+        // 単語一覧から単語がDeleteされた際に出来る歯抜けidの抽出
         // DBに歯抜けが無いかチェック
         while(database_check());
         database_check1();
@@ -96,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         SelectAns2 = ChoiceSelect.get(1);
         SelectAns3 = ChoiceSelect.get(2);
 
-        // 3つの選択肢番号と出題番号が同じでないかチェック
+        // 同じ選択肢が2つ発生しないように答え以外の3つの選択肢番号と出題番号が同じでないかチェック
+        // 同じだった場合、4つ目のChoiceSelectデータを取得
         if(SelectQuestion == ChoiceSelect.get(0))
             SelectAns1 = ChoiceSelect.get(3);
         else if(SelectQuestion == ChoiceSelect.get(1))
@@ -130,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    // 引数の選択肢idからデータを抽出する
+    // 引数の選択肢idからデータを抽出し返す関数
     private String getChoice(int SelectAns) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -174,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
             bt.setBackgroundResource(R.drawable.change);
             list.add("〇");
+            c_cnt++;
             iv.setImageResource(R.drawable.outline_radio_button_unchecked_24);
             addContentView(iv,lp);
         }
@@ -182,10 +188,33 @@ public class MainActivity extends AppCompatActivity {
             bt.setBackgroundResource(R.drawable.change2);
             list.add("×");
             iv.setImageResource(R.drawable.baseline_close_24);
+
+            // 正解ボタンを赤色表示
+            if(bt1.getText().equals(Anser)){
+                bt1.setBackgroundResource(R.drawable.change);
+            }
+            else if(bt2.getText().equals(Anser)) {
+                bt2.setBackgroundResource(R.drawable.change);
+            }
+            else if(bt3.getText().equals(Anser)){
+                bt3.setBackgroundResource(R.drawable.change);
+            }
+            else if(bt4.getText().equals(Anser)){
+                bt4.setBackgroundResource(R.drawable.change);
+            }
             addContentView(iv,lp);
         }
         cntQuestion++;
+
+        // 10問目が解き終わったとき
         if(cntQuestion == 10){
+
+            // TableName（カテゴリName）を送信リストに追加
+            list.add(DB_TableName);
+
+            // 正解数を送信リストに追加
+            list.add(String.valueOf(c_cnt));
+
             // 結果画面へ遷移
             Intent intent = new Intent(MainActivity.this,ResultActivity.class);
             intent.putExtra("LIST",list);
@@ -193,12 +222,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         else {
-            // HandlerクラスからpostDelayedを呼び出し
+            // HandlerクラスからpostDelayedを呼び出し（1000ミリ秒スリープ後の処理)
             handle.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     // 枠線表示を元に戻す
                     bt.setBackgroundResource(R.drawable.shape);
+                    bt1.setBackgroundResource(R.drawable.shape);
+                    bt2.setBackgroundResource(R.drawable.shape);
+                    bt3.setBackgroundResource(R.drawable.shape);
+                    bt4.setBackgroundResource(R.drawable.shape);
                     iv.setImageBitmap(null);
                     setQuestion();
                     bt1.setEnabled(true);bt2.setEnabled(true);bt3.setEnabled(true);bt4.setEnabled(true);
@@ -209,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
     // バックキーが押された時の処理
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
+        // 確認ダイアログを表示
         new AlertDialog.Builder(MainActivity.this).setMessage("中断しますか？").setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -224,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    // 1の歯抜けの抽出
     public void database_check1(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -234,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
         c = db.rawQuery("Select min(_id) from " + DB_TableName + ";",null);
         c.moveToFirst();
         one_id = Integer.parseInt(c.getString(c.getColumnIndex("min(_id)")));
+
+        // idの最小値が2だった場合
         if(one_id == 2){
             c = db.rawQuery("Select max(_id) from " + DB_TableName + ";",null);
             c.moveToFirst();
@@ -250,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
        DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
-        int one_id,n_id,max_id;
+        int n_id,max_id;
 
 
         // 2以上の歯抜け番号の抽出
@@ -272,18 +309,28 @@ public class MainActivity extends AppCompatActivity {
         c = db.rawQuery("update " + DB_TableName + " set _id = " + n_id + " where _id = "+ max_id + ";",null);
         c.moveToFirst();
 
-        /*c = db.rawQuery("Select _id from " + DB_TableName + ";",null);
-        c.moveToFirst();
-        int id = 0;
-        while(id >= 0){
-            id = Integer.parseInt(c.getString(c.getColumnIndex("_id")));
-            Log.d("FILE", String.valueOf(id));
-            c.moveToNext();
-        }*/
         db.close();
         c.close();
 
 
         return true;
     }
+
+    // タイトルをカテゴリ別に設定
+    private String set_Title(String db_tableName) {
+        switch (db_tableName){
+            case "quiz_table_B":
+                return "ビジネス";
+            case "quiz_table_L":
+                return "生活";
+            case "quiz_table_A":
+                return "動物";
+            case "quiz_table_C":
+                return "宇宙";
+            case "quiz_table_F":
+                return "食べ物";
+        }
+        return "選択なし";
+    }
+
 }
