@@ -16,13 +16,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        // ビジネスカテゴリ
         db.execSQL(
                 "Create table quiz_table_B("
                         + "_id integer primary key autoincrement not null, "
                         + "Title text ,"
                         + "Ans text"
                         + ");");
-
+        // 生活カテゴリ
         db.execSQL(
                 "Create table quiz_table_L("
                         + "_id integer primary key autoincrement not null, "
@@ -30,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "Ans text"
                         + ");");
 
+        // 動物カテゴリ
         db.execSQL(
                 "Create table quiz_table_A("
                         + "_id integer primary key autoincrement not null, "
@@ -37,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "Ans text"
                         + ");");
 
+        // 宇宙カテゴリ
         db.execSQL(
                 "Create table quiz_table_C("
                         + "_id integer primary key autoincrement not null, "
@@ -44,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "Ans text"
                         + ");");
 
+        // 食べ物カテゴリ
         db.execSQL(
                 "Create table quiz_table_F("
                         + "_id integer primary key autoincrement not null, "
@@ -51,12 +55,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "Ans text"
                         + ");");
 
-
+        // 学習履歴テーブル
         db.execSQL(
                 "Create table quiz_log("
-                        + "_id integer primary key autoincrement not null,"
-                        + "date text,"
-                        + "ans double);");
+                        + "_id integer primary key autoincrement not null, "
+                        + "Date text ,"
+                        + "cnt real,"
+                        + "Category text);");
+
 
 
 

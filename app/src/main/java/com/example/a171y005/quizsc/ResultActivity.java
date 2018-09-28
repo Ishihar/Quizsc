@@ -1,7 +1,7 @@
 package com.example.a171y005.quizsc;
 
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,15 +21,19 @@ public class ResultActivity extends AppCompatActivity {
     private SimpleAdapter sim;
 
 
-    ArrayList<String> list = new ArrayList<>();
-    ArrayList<String> title = new ArrayList<>();
-    ArrayList<String> ans = new ArrayList<>();
-    ArrayList<String> res = new ArrayList<>();
+    ArrayList<String> list = new ArrayList<>();     // MainActivityの学習結果を保存するlist
+    // list.get(0) ～ list.get(29)... 英単語・意味・正解不正解の3つ1セットのデータが10個
+    // list.get(30)...カテゴリ名（テーブル名）
+    // list.get(31)...問題正解数
+    ArrayList<String> title = new ArrayList<>();    // listから英単語データのみを取得するlist
+    ArrayList<String> ans = new ArrayList<>();      // listから意味データのみを取得するlist
+    ArrayList<String> res = new ArrayList<>();      // listから正解か否かを取得するlist
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("学習結果");
 
         // MainActivityからの送信リストを受け取り
@@ -62,6 +66,7 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         list_data = new ArrayList<HashMap<String, String>>();
+
 
         // ListViewに表示するためのAdapterにセット
         sim = new SimpleAdapter(getApplicationContext(), list_data, R.layout.result, new String[]{"left", "center", "right"}, new int[]{R.id.textTitle, R.id.textAns, R.id.textRes});
@@ -99,17 +104,16 @@ public class ResultActivity extends AppCompatActivity {
         });
 
         // LogActivityへ学習結果を送信
-        Insert_data(list.get(31));
+        Insert_data(list.get(31),set_Title(list.get(30)));
 
     }
 
-    private void Insert_data(String s) {
-        double c_cnt = Integer.parseInt(s);
+    private void Insert_data(String int_cnt,String catename) {
+        double c_cnt = Double.parseDouble(int_cnt);
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c;
-
-        db.execSQL("Insert into quiz_log(date,ans) values((Select current_timestamp)," + c_cnt + ");");
+        db.execSQL("Insert into quiz_log(Date,cnt,Category) values((Select current_timestamp)," + c_cnt + ",'" + catename + "');");
+        db.close();
     }
 
     public boolean onKeyDown(int KeyCode, KeyEvent event){

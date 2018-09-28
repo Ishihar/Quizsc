@@ -2,6 +2,7 @@ package com.example.a171y005.quizsc;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setTitle("単語一覧(ビジネス)");
 
         // 単語リストの表示関数（引数はあいまい検索の為のキーワード)
@@ -293,7 +295,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         int count = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
 
         // 単語にアルファベット以外の文字が入力されている場合
-        // i=0から単語の長さまで1文字ずつ検査
+        // i=0番目から単語の長さまで1文字ずつ検査
         for(int i = 0; i < edit_w.length(); i++) {
             check = edit_w.substring(i, i + 1);
 

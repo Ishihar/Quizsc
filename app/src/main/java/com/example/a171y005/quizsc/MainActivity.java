@@ -2,12 +2,14 @@ package com.example.a171y005.quizsc;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,18 +23,29 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String DB_TableName;        // カテゴリName（TableName)
-    private String Title,Anser;                                  // 問題の単語,答え
-    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion;     // カテゴリ別全件数,問題カウント,選択肢変数1~3,出題id変数
-    private int c_cnt = 0; // 正解カウント変数
-    private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();   // 出題単語を取得するためのid配列
-    private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();     // 選択肢を取得する為のid配列
-    private ArrayList<String> list = new ArrayList<>();     // ResultActivityへ送信するデータリスト
+    // カテゴリName（TableName)
+    private String DB_TableName;
+    // 問題の単語,答え
+    private String Title,Anser;
+    // カテゴリ別全件数,問題カウント,選択肢変数1~3,出題id変数
+    private int Totalcount,cntQuestion = 0,SelectAns1,SelectAns2,SelectAns3,SelectQuestion;
+    // 正解カウント変数
+    private int c_cnt = 0;
+    // 出題単語を取得するためのid配列
+    private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
+    // 選択肢を取得する為のid配列
+    private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();
+    // ResultActivityへ送信するデータリスト
+    private ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 縦画面固定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // DB呼び出し
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
@@ -49,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // データの全件数をTotalcountに代入する
         Totalcount = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
+        Log.d("Main_Status",set_Title(DB_TableName) + "カテゴリの単語数は" + Totalcount + "です。");
 
         // 選択肢id配列の作成（1~全件数）
         for(int i = 1; i <= Totalcount; i++){
@@ -67,10 +81,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){             // Activityが表示された際に行う処理
         super.onResume();
-        // 単語一覧から単語がDeleteされた際に出来る歯抜けidの抽出
+        // 単語一覧から単語がDeleteされた際に出来る歯抜けidの抽出(2以上の歯抜けのみ）
         // DBに歯抜けが無いかチェック
         while(database_check());
+        // 1が抜けていた場合の処理
         database_check1();
+        // 学習開始
         setQuestion();
     }
 
@@ -81,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
         // 出題用id配列から出題するidを抽出
         SelectQuestion = TitleSelection.get(cntQuestion);
+        Log.d("Main_Status","出題IDは " + SelectQuestion + " です。");
 
-        // cntQuestionが問題数を超えた場合
+        // cntQuestionが問題数を超えた場合タイトル画面へ戻る
         if(Totalcount <= cntQuestion + 1){
             Toast.makeText(this,"問題終了",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this,TitleActivity.class);
@@ -108,12 +125,15 @@ public class MainActivity extends AppCompatActivity {
             SelectAns2 = ChoiceSelect.get(3);
         else if(SelectQuestion == ChoiceSelect.get(2))
             SelectAns3 = ChoiceSelect.get(3);
+        Log.d("Main_Status","3つの選択肢IDは " + SelectAns1 + "," + SelectAns2 + "," + SelectAns3 + " です。");
 
         // DBからTitle,Ansを取得し結果表示用配列listに代入
         Title = c.getString(c.getColumnIndex("Title"));
         Anser = c.getString(c.getColumnIndex("Ans"));
         list.add(Title);
         list.add(Anser);
+        Log.d("Main_Status","出題される単語は " + Title + " です。その意味は " + Anser + " です。");
+        Log.d("Main_Status"," ");
 
         // ボタン表示配列の作成
         ArrayList<String> RandomChoice = new ArrayList<String>();
@@ -152,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         return get_Choice;
     }
 
-
+    // 選択肢（4つ）のいずれかを押されたとき
     public void onClick(final View v) {
         // 選択したボタンの取得
         final Button bt = (Button) v;
@@ -163,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         final Button bt3 = (Button)(findViewById(R.id.button3));
         final Button bt4 = (Button)(findViewById(R.id.button4));
 
-        // どれかボタンが押された場合1000ミリ秒Enableする
+        // どれかボタンが押された場合1000ミリ秒Enableする（結果表示の為）
         bt1.setEnabled(false);bt2.setEnabled(false);bt3.setEnabled(false);bt4.setEnabled(false);
 
         // 選択したボタンの枠線を赤色表示
@@ -171,14 +191,18 @@ public class MainActivity extends AppCompatActivity {
 
         // 〇×表示
         final ImageView iv = new ImageView(this);
+        // XYを指定して表示
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(600,600);
         lp.leftMargin = 300;
         lp.topMargin = 120;
 
         Handler handle = new Handler();
-        if (bt.getText().equals(Anser)) {     //  押されたボタンのテキストが答えと一致していた場合
+
+        //  押されたボタンのテキストが答えと一致していた場合
+        if (bt.getText().equals(Anser)) {
             bt.setBackgroundResource(R.drawable.change);
             list.add("〇");
+            // 正解カウント
             c_cnt++;
             iv.setImageResource(R.drawable.outline_radio_button_unchecked_24);
             addContentView(iv,lp);
@@ -243,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     // バックキーが押された時の処理
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
         // 確認ダイアログを表示
-        new AlertDialog.Builder(MainActivity.this).setMessage("中断しますか？").setNegativeButton("No", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(MainActivity.this).setMessage("中断しますか？\n中断すると学習状況は記録されません。").setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 return;
@@ -258,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    // 1の歯抜けの抽出
+    // 1の歯抜けの抽出関数
     public void database_check1(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -270,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         c.moveToFirst();
         one_id = Integer.parseInt(c.getString(c.getColumnIndex("min(_id)")));
 
-        // idの最小値が2だった場合
+        // idの最小値が2だった場合(1がない場合)
         if(one_id == 2){
             c = db.rawQuery("Select max(_id) from " + DB_TableName + ";",null);
             c.moveToFirst();
@@ -287,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
        DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
+        // 最小値id,最大値id
         int n_id,max_id;
 
 
@@ -294,25 +319,26 @@ public class MainActivity extends AppCompatActivity {
         c = db.rawQuery("select min(_id + 1) as id from " + DB_TableName + " where (_id + 1) not in (select _id from " + DB_TableName + ");",null);
         c.moveToFirst();
         n_id = Integer.parseInt(c.getString(c.getColumnIndex("id")));
+        Log.d("Main_Status","歯抜けIDが抽出されました。IDは " + n_id + " です。");
 
         // id最大値の抽出
         c = db.rawQuery("select max(_id) as max_id from " + DB_TableName + ";",null);
         c.moveToFirst();
         max_id = Integer.parseInt(c.getString(c.getColumnIndex("max_id")));
 
-        // 歯抜けが無かった場合falseを返す
+        // 歯抜けが無かった場合falseを返す(繰り返し終了)
         if (n_id == max_id + 1){
+            Log.d("Main_Status","歯抜けID処理終了");
             return false;
         }
 
-        // id最大値を歯抜け番号にUpdate
+        // id最大値を歯抜け番号にUpdateしtrueを返す
         c = db.rawQuery("update " + DB_TableName + " set _id = " + n_id + " where _id = "+ max_id + ";",null);
         c.moveToFirst();
+        Log.d("Main_Status","最大値のID " + max_id + " を " + n_id + " に置き換えます。");
 
         db.close();
         c.close();
-
-
         return true;
     }
 
