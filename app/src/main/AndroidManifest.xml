@@ -3,6 +3,7 @@
           package="com.example.a171y005.quizsc">
 
     <application
+        android:name="Goal"
         android:allowBackup="true"
         android:icon="@drawable/sharp_school_24"
         android:label="英単語学習"
@@ -25,6 +26,7 @@
         </activity>
         <activity android:name=".LogActivity">
         </activity>
+
     </application>
 
 </manifest>

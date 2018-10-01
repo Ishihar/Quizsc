@@ -76,6 +76,8 @@ public class LogActivity extends AppCompatActivity {
         catch (Exception e){
             tv_2.setText("学習状況を取得できません。");
         }
+
+        set_Goal();
     }
 
     // バックキーが押された時の処理（タイトルへ戻る）
@@ -109,5 +111,9 @@ public class LogActivity extends AppCompatActivity {
         }
 
         return key;
+    }
+
+    public void set_Goal(){
+        //Goal goal = (Goal)getApplication();
     }
 }
