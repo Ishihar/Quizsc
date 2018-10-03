@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
         // 〇×表示
         final ImageView iv = new ImageView(this);
         // XYを指定して表示
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(600,600);
-        lp.leftMargin = 300;
-        lp.topMargin = 120;
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(500,500);
+        lp.leftMargin = 145;
+        lp.topMargin = 5;
 
         Handler handle = new Handler();
 

@@ -16,18 +16,17 @@
     <TextView
         android:id="@+id/textQuestion_Res"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="30dp"
-        android:layout_weight="0.42"/>
+        />
 
     <TextView
         android:id="@+id/textQuestion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="5.38"
+        android:layout_height="250dp"
         android:fontFamily="serif"
         android:gravity="center_vertical|center_horizontal"
         android:text="Title"
@@ -38,15 +37,15 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="659dp"
-        tools:layout_editor_absoluteY="127dp"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="127dp">
 
         <Button
             android:id="@+id/button1"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="27dp"
             android:layout_marginEnd="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -63,7 +62,8 @@
             app:layout_constraintRight_toRightOf="parent"
             tools:layout_constraintBottom_creator="1"
             tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1"/>
+            tools:layout_constraintRight_creator="1"
+            app:layout_constraintHorizontal_bias="0.496"/>
 
         <Button
             android:id="@+id/button2"
@@ -91,7 +91,7 @@
             android:id="@+id/button3"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="26dp"
             android:layout_weight="1"
             android:background="@drawable/shape"
             android:fontFamily="serif"
@@ -99,7 +99,7 @@
             android:text="Button3"
             android:textSize="36dp"
             app:layout_constraintBottom_toTopOf="@+id/button4"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="@+id/button2"
             app:layout_constraintRight_toRightOf="@+id/button2"
             tools:layout_constraintBottom_creator="1"
@@ -110,7 +110,7 @@
             android:id="@+id/button4"
             android:layout_width="440dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="227dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:background="@drawable/shape"
             android:fontFamily="serif"

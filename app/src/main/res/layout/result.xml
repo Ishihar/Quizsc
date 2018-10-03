@@ -6,11 +6,10 @@
 
     <TextView
         android:id="@+id/textTitle"
-        android:layout_width="200dp"
+        android:layout_width="194dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.15"
         android:lineSpacingExtra="10sp"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textSize="24sp"
         android:textStyle="bold"
         android:typeface="sans"/>
@@ -19,7 +18,7 @@
         android:id="@+id/textAns"
         android:layout_width="129dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.83"
+        android:layout_weight="0.63"
         android:lineSpacingExtra="10sp"
         android:textAlignment="center"
         android:textSize="24sp"/>
