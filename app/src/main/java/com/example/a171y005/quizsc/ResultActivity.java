@@ -112,7 +112,7 @@ public class ResultActivity extends AppCompatActivity {
         double c_cnt = Double.parseDouble(int_cnt);
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        db.execSQL("Insert into quiz_log(Date,cnt,Category) values((Select current_timestamp)," + c_cnt + ",'" + catename + "');");
+        db.execSQL("Insert into quiz_log(cnt,Category) values(" + c_cnt + ",'" + catename + "');");
         db.close();
     }
 

@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         // XYを指定して表示
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(500,500);
         lp.leftMargin = 145;
-        lp.topMargin = 5;
+        lp.topMargin = 3;
 
         Handler handle = new Handler();
 
@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
             list.add(String.valueOf(c_cnt));
 
             // 結果画面へ遷移
+            Log.d("Main_Status","10問目が終了したので結果画面へ遷移します。");
             Intent intent = new Intent(MainActivity.this,ResultActivity.class);
             intent.putExtra("LIST",list);
             startActivity(intent);
@@ -275,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
         }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d("Main_Status","中断が選択されました。");
                 Intent intent = new Intent(MainActivity.this, TitleActivity.class);
                 startActivity(intent);
             }
@@ -335,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         // id最大値を歯抜け番号にUpdateしtrueを返す
         c = db.rawQuery("update " + DB_TableName + " set _id = " + n_id + " where _id = "+ max_id + ";",null);
         c.moveToFirst();
-        Log.d("Main_Status","最大値のID " + max_id + " を " + n_id + " に置き換えます。");
+        Log.d("Main_Status","最大値のID " + (max_id - 1) + " を " + n_id + " に置き換えます。");
 
         db.close();
         c.close();
