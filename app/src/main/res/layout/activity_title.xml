@@ -10,8 +10,10 @@
     tools:context="com.example.a171y005.quizsc.TitleActivity">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/cs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffff"
         android:layout_weight="0.1">
 
         <Button
@@ -60,6 +62,8 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="180dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="0.1"
             android:background="@drawable/button"
@@ -68,13 +72,11 @@
             android:textColor="@android:color/background_light"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.783"
-            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/bt_start"
-            android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="@+id/bt_start"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.783"/>
 
         <TextView
             android:id="@+id/textView"
@@ -82,6 +84,8 @@
             android:layout_height="270dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="英単語学習"
@@ -89,17 +93,15 @@
             android:textSize="100sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/bt_start"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.361"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.361"/>
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="236dp"
-            android:layout_height="72dp"
+            android:layout_width="240dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -109,7 +111,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.91"
+            app:layout_constraintVertical_bias="0.939"
             tools:scrollbarSize="@android:dimen/dialog_min_width_major"
             tools:textAlignment="viewStart"
             />

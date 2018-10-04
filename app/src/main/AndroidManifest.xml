@@ -4,9 +4,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/sharp_school_24"
+        android:icon="@mipmap/baseline_sentiment_very_satisfied_black_48dp"
         android:label="英単語学習"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight">
         <activity android:name=".TitleActivity"
