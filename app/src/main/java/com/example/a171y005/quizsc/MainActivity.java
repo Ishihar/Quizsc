@@ -240,10 +240,15 @@ public class MainActivity extends AppCompatActivity {
             list.add(String.valueOf(c_cnt));
 
             // 結果画面へ遷移
-            Log.d("Main_Status","10問目が終了したので結果画面へ遷移します。");
-            Intent intent = new Intent(MainActivity.this,ResultActivity.class);
-            intent.putExtra("LIST",list);
-            startActivity(intent);
+            handle.postDelayed(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Log.d("Main_Status","10問目が終了したので結果画面へ遷移します。");
+                                       Intent intent = new Intent(MainActivity.this,ResultActivity.class);
+                                       intent.putExtra("LIST",list);
+                                       startActivity(intent);
+                                   }
+            },1000);
         }
 
         else {

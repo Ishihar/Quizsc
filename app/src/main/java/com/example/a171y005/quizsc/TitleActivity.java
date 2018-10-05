@@ -1,11 +1,15 @@
 package com.example.a171y005.quizsc;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -14,10 +18,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
+
+import static android.R.attr.value;
 
 
 public class TitleActivity extends AppCompatActivity {
+
+    private boolean set24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +44,30 @@ public class TitleActivity extends AppCompatActivity {
             Insert_data("C");
             Insert_data("F");
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        int mNotificationId = 001;
+
+        Calendar cal = Calendar.getInstance();
+        //cal.setTimeInMillis(86400000);
+        cal.setTimeInMillis(20000);
+        cal.set(Calendar.MILLISECOND,0);
+        Intent intent = new Intent(this,TitleActivity.class);
+        intent.putExtra("KEY",value);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        long init_alarm = cal.getTimeInMillis();
+        Log.d("Title", String.valueOf(init_alarm));
+
+        PendingIntent contentIntent = PendingIntent.getBroadcast(this,mNotificationId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP,init_alarm,contentIntent);
+    }
+
 
     public void onClick(View v){
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
@@ -111,5 +147,11 @@ public class TitleActivity extends AppCompatActivity {
         else {
             return;
         }
+    }
+
+    public static String getNowDate(){
+        final DateFormat df = new SimpleDateFormat("HH");
+        final Date date = new Date(System.currentTimeMillis());
+        return df.format(date);
     }
 }

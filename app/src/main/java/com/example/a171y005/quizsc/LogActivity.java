@@ -133,6 +133,7 @@ public class LogActivity extends AppCompatActivity {
         }
     }
 
+    // 平均値に応じたカテゴリ名を取得
     public String set_Title(Double args) {
         String key;
         if (args.equals(avg.get(0))) {
@@ -162,7 +163,7 @@ public class LogActivity extends AppCompatActivity {
     public void set_Goal(double totalavg, double highavg, double lowavg) {
         TextView tv_GOAL = (TextView) findViewById(R.id.tv_g1);
         double hantei = 0;
-        String str = "";
+        String str = "",str2 = "";
 
         // 0~2の乱数を取得
         Random random = new Random();
@@ -187,13 +188,20 @@ public class LogActivity extends AppCompatActivity {
         // 5,0 < 7.0 < 9.0 < でそれぞれ表示する目標値の変更
         if (hantei < 5) {
             tv_GOAL.setText(str + "平均正解数5.0以上を目指そう");
+            str2 = str + "平均正解数5.0以上を目指しましょう";
         } else if (hantei < 7) {
             tv_GOAL.setText(str + "平均正解数7.0以上を目指そう");
+            str2 = str + "平均正解数7.0以上を目指しましょう";
+
         } else if (hantei < 9) {
             tv_GOAL.setText(str + "平均正解数9.0以上を目指そう");
+            str2 = str + "平均正解数9.0以上を目指しましょう";
+
         } else {
             tv_GOAL.setText(str + "平均正解数9.0以上を維持しよう");
+            str2 = str + "平均正解数9.0以上を維持しましょう";
         }
+
     }
 
     // キャッシュクリアボタンの表示
