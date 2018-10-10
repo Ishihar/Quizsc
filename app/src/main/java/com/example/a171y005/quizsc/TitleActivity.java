@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -18,10 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.StringTokenizer;
 
 import static android.R.attr.value;
@@ -38,46 +34,45 @@ public class TitleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_title);
 
         // 各カテゴリのデータをCSVファイルからInsert
-            Insert_data("B");
-            Insert_data("L");
-            Insert_data("A");
-            Insert_data("C");
-            Insert_data("F");
+        Insert_data("B");
+        Insert_data("L");
+        Insert_data("A");
+        Insert_data("C");
+        Insert_data("F");
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         int mNotificationId = 001;
 
         Calendar cal = Calendar.getInstance();
         //cal.setTimeInMillis(86400000);
         cal.setTimeInMillis(20000);
-        cal.set(Calendar.MILLISECOND,0);
-        Intent intent = new Intent(this,TitleActivity.class);
-        intent.putExtra("KEY",value);
+        cal.set(Calendar.MILLISECOND, 0);
+        Intent intent = new Intent(this, TitleActivity.class);
+        intent.putExtra("KEY", value);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         long init_alarm = cal.getTimeInMillis();
-        Log.d("Title", String.valueOf(init_alarm));
 
-        PendingIntent contentIntent = PendingIntent.getBroadcast(this,mNotificationId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getBroadcast(this, mNotificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP,init_alarm,contentIntent);
+        am.set(AlarmManager.RTC_WAKEUP, init_alarm, contentIntent);
     }
 
 
-    public void onClick(View v){
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+    public void onClick(View v) {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String cate = spinner.getSelectedItem().toString();
 
         // STARTボタンが押されたとき選択カテゴリからTable名を取得
-        if(v.getId() == R.id.bt_start){
-            switch (cate){
+        if (v.getId() == R.id.bt_start) {
+            switch (cate) {
                 case "問題カテゴリ選択":
-                    Toast.makeText(TitleActivity.this,"カテゴリを選択してください。",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TitleActivity.this, "カテゴリを選択してください。", Toast.LENGTH_SHORT).show();
                     return;
                 case "ビジネス":
                     cate = "quiz_table_B";
@@ -96,18 +91,18 @@ public class TitleActivity extends AppCompatActivity {
                     break;
             }
             // MainActivityに取得したTableNameをput
-            Intent intent = new Intent(TitleActivity.this,MainActivity.class);
-            intent.putExtra("Table_NAME",cate);
+            Intent intent = new Intent(TitleActivity.this, MainActivity.class);
+            intent.putExtra("Table_NAME", cate);
             startActivity(intent);
         }
         // 単語一覧Activityへ
-        else if(v.getId() == R.id.bt_add){
-            Intent intent = new Intent(TitleActivity.this,WordActivity.class);
+        else if (v.getId() == R.id.bt_add) {
+            Intent intent = new Intent(TitleActivity.this, WordActivity.class);
             startActivity(intent);
         }
         // 学習履歴Activityへ
-        else if(v.getId() == R.id.bt_gostd){
-            Intent intent = new Intent(TitleActivity.this,LogActivity.class);
+        else if (v.getId() == R.id.bt_gostd) {
+            Intent intent = new Intent(TitleActivity.this, LogActivity.class);
             startActivity(intent);
         }
         finish();
@@ -120,12 +115,12 @@ public class TitleActivity extends AppCompatActivity {
         Cursor c;
 
 
-        c = db.rawQuery("Select count(*) from quiz_table_" + cate + ";",null);
+        c = db.rawQuery("Select count(*) from quiz_table_" + cate + ";", null);
         c.moveToFirst();
 
         // データ件数が0件だった場合Insert
         int count = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-        if(count == 0) {
+        if (count == 0) {
             try {
                 // /main/assets/worddata.csvを取得
                 InputStream is = getResources().getAssets().open("worddata-" + cate + ".csv");
@@ -137,21 +132,14 @@ public class TitleActivity extends AppCompatActivity {
                         StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
                         db.execSQL("insert into quiz_table_" + cate + "(Title,Ans) values('" + stringTokenizer.nextToken() + "','" + stringTokenizer.nextToken() + "');");
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             return;
         }
-    }
-
-    public static String getNowDate(){
-        final DateFormat df = new SimpleDateFormat("HH");
-        final Date date = new Date(System.currentTimeMillis());
-        return df.format(date);
     }
 }

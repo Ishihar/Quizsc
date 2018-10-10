@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
-    // 引数の選択肢idからデータを抽出し返す関数
+    // 引数の選択肢idから意味を取得その文字列を返す関数
     private String getChoice(int SelectAns) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
