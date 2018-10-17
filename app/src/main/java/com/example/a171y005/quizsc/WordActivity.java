@@ -34,7 +34,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     private SimpleAdapter sim;
     private String title,search = "";
     private String DB_Table_Name = "quiz_table_B";
-    private int pos;
+    private int pos,sppos=0;
     private HashMap<String,String> hashMap = new HashMap<String, String>();
 
     @Override
@@ -176,33 +176,9 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
       switch (item.getItemId()) {
           // addボタンが押されたとき
           case R.id.action_settings:
-              LayoutInflater factory = LayoutInflater.from(this);
-              final View edit_view = factory.inflate(R.layout.addlayout, null);
-              AlertDialog.Builder dialog = new AlertDialog.Builder(WordActivity.this);
-              dialog.setView(edit_view);
-              dialog.setTitle("単語追加");
+              wordset("","");
 
-              // 単語追加ダイアログ内の設定
-              dialog.setPositiveButton("追加", new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                      // カテゴリ選択用のSpinner
-                      Spinner spinner = (Spinner) edit_view.findViewById(R.id.spinner2);
-                      String catename = spinner.getSelectedItem().toString();
-
-                      // 単語とその意味の入力欄
-                      EditText edit_Text = (EditText) edit_view.findViewById(R.id.EditWord);
-                      EditText edit_mean = (EditText) edit_view.findViewById(R.id.EditMean);
-                      String editw = edit_Text.getText().toString();
-                      String editm = edit_mean.getText().toString();
-
-                      // 3つのデータを引き渡し
-                      add_mod(editw, editm,catename);
-                  }
-              });
-              dialog.show();
-
-              // Spinnerからビジネスを選択
+          // Spinnerからビジネスを選択
           case R.id.item2:
               setTitle("単語一覧(ビジネス)");
               // テーブル名の設定
@@ -239,6 +215,40 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
       return super.onOptionsItemSelected(item);
   }
+
+    private void wordset(String s, String s1) {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View edit_view = factory.inflate(R.layout.addlayout, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(WordActivity.this);
+        dialog.setView(edit_view);
+        dialog.setTitle("単語追加");
+        final Spinner spinner = (Spinner) edit_view.findViewById(R.id.spinner2);
+        final EditText edit_Text = (EditText) edit_view.findViewById(R.id.EditWord);
+        final EditText edit_mean = (EditText) edit_view.findViewById(R.id.EditMean);
+        spinner.setSelection(sppos);
+        edit_Text.setText(s);
+        edit_mean.setText(s1);
+
+
+        // 単語追加ダイアログ内の設定
+        dialog.setPositiveButton("追加", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // カテゴリ選択用のSpinner
+                String catename = spinner.getSelectedItem().toString();
+
+                // 単語とその意味の入力欄
+                String editw = edit_Text.getText().toString();
+                String editm = edit_mean.getText().toString();
+
+                // 3つのデータを引き渡し
+                add_mod(editw, editm,catename);
+            }
+        });
+        dialog.show();
+
+    }
+
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -274,18 +284,23 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
             case "ビジネス":
                 tablename = "quiz_table_B";
+                sppos = 1;
                 break;
             case "生活":
                 tablename = "quiz_table_L";
+                sppos = 2;
                 break;
             case "動物":
                 tablename = "quiz_table_A";
+                sppos = 3;
                 break;
             case "宇宙":
                 tablename = "quiz_table_C";
+                sppos = 4;
                 break;
             case "食べ物":
                 tablename = "quiz_table_F";
+                sppos = 5;
                 break;
         }
         // 追加される単語が選択されたカテゴリに既に登録されているかチェック
@@ -301,7 +316,8 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
             // アルファベット以外の文字が検出された場合
             if (check.matches("[^a-zA-z]")) {
-                Toast.makeText(WordActivity.this, "アルファベット以外の文字が入力されています。", Toast.LENGTH_LONG).show();
+                Toast.makeText(WordActivity.this, "単語入力欄にアルファベット以外の文字が入力されています。", Toast.LENGTH_LONG).show();
+                wordset(edit_w, edit_m);
                 return;
             }
         }
@@ -309,13 +325,14 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         // 追加される単語をDBで検索をかけデータ件数が1件以上出力された場合
         if (count >= 1) {
             message = edit_w + "は既に登録されています。" + "\n" + "登録内容:" + anser;
-            builder.setMessage(message);
+
         }
         else {
             db.execSQL("Insert into " + tablename + " (Title,Ans) values('" + edit_w + "','" + edit_m + "');");
-            builder.setMessage(edit_w + "\n" + catename + "カテゴリに登録しました。");
+            message = edit_w + "\n" + catename + "カテゴリに登録しました。";
         }
         builder.setTitle("単語登録");
+        builder.setMessage(message);
         builder.setPositiveButton("OK", null);
         builder.show();
         c.close();

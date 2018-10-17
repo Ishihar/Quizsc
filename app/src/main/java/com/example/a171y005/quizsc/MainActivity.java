@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // カテゴリ別タイトルの設定
         setTitle("英単語学習(" + set_Title(DB_TableName) + ")");
 
-        // DBから全単語の数を取得
+        // テーブルから全単語の数を取得
         c = db.rawQuery("select count(*) from " + DB_TableName, null);
         c.moveToFirst();
 
