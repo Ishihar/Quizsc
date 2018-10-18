@@ -31,7 +31,7 @@
             android:id="@+id/EditWord"
             android:layout_width="304dp"
             android:layout_height="55dp"
-            android:layout_marginTop="62dp"
+            android:layout_marginTop="64dp"
             android:ems="10"
             android:hint="単語"
             android:inputType="text"

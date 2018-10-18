@@ -30,12 +30,20 @@ import static com.example.a171y005.quizsc.R.id.Show_word;
 
 public class WordActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    // 単語一覧表示の為のリスト
     private ArrayList<HashMap<String,String>> list_data;
+    // リストにセットするAdapter
     private SimpleAdapter sim;
+    // 単語追加や削除に使用するTitle,検索キーワードを格納するsearch
     private String title,search = "";
+    // カテゴリ別のテーブル名を格納する（初期設定はビジネステーブル)
     private String DB_Table_Name = "quiz_table_B";
+    // リスト表示から何番が削除されたかを格納するpos
+    // 単語追加ダイアログに選択されたカテゴリを保持するsppos
     private int pos,sppos=0;
+    // 単語一覧を表示する為のマップ
     private HashMap<String,String> hashMap = new HashMap<String, String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +244,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         edit_mean.setText(s1);
 
 
+
         // 単語追加ダイアログ内の設定
         dialog.setPositiveButton("追加", new DialogInterface.OnClickListener() {
             @Override
@@ -321,7 +330,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
             check = edit_w.substring(i, i + 1);
 
             // アルファベット以外の文字が検出された場合
-            if (check.matches("[^a-zA-z]")) {
+            if (check.matches("[^a-zA-Z]")) {
                 Toast.makeText(WordActivity.this, "単語入力欄にアルファベット以外の文字が入力されています。", Toast.LENGTH_LONG).show();
                 wordset(edit_w, edit_m);
                 return;
