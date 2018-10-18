@@ -20,7 +20,7 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="30dp"
+        android:textSize="30sp"
         />
 
     <TextView
@@ -29,9 +29,10 @@
         android:layout_height="250dp"
         android:fontFamily="serif"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Title"
+        android:text="@string/test_title"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
         android:textSize="66sp"
         android:textStyle="italic"/>
 
@@ -55,15 +56,14 @@
             android:elevation="1dp"
             android:fontFamily="serif"
             android:onClick="onClick"
-            android:text="Button1"
-            android:textSize="36dp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             tools:layout_constraintBottom_creator="1"
             tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1"
-            app:layout_constraintHorizontal_bias="0.496"/>
+            tools:layout_constraintRight_creator="1"/>
 
         <Button
             android:id="@+id/button2"
@@ -78,8 +78,7 @@
             android:background="@drawable/shape"
             android:fontFamily="serif"
             android:onClick="onClick"
-            android:text="Button2"
-            android:textSize="36dp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -96,8 +95,7 @@
             android:background="@drawable/shape"
             android:fontFamily="serif"
             android:onClick="onClick"
-            android:text="Button3"
-            android:textSize="36dp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@+id/button4"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="@+id/button2"
@@ -115,8 +113,7 @@
             android:background="@drawable/shape"
             android:fontFamily="serif"
             android:onClick="onClick"
-            android:text="Button4"
-            android:textSize="36dp"
+            android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/button3"

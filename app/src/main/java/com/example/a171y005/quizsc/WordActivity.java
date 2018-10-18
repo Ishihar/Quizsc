@@ -123,14 +123,20 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             AlertDialog.Builder builder = new AlertDialog.Builder(WordActivity.this);
             int cnt = 0;
+            // title={main=単語, right=意味}というデータが代入される
             title = sim.getItem(info.position).toString();
+            // 単語抽出の為のfor文
+            // データの長さ分[,]があるまで1文字ずつ検査する
             for (int i = 0; i < title.length(); i++) {
                 String check = title.substring(i, i + 1);
                 if (check.equals(",")) {
                     break;
                 }
+                // [,]までの文字数をカウントしておく
                 cnt++;
             }
+            // 単語部分の抽出
+            // [{main=]という開始5文字は不要なので6文字目から[,]までのカウント数を切り出す
             title = title.substring(6, cnt);
             pos = info.position;
 

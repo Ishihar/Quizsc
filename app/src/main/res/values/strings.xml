@@ -10,4 +10,14 @@
         <item>食べ物</item>
     </string-array>
 
+    <string name="app_title">英単語学習</string>
+    <string name="app_start">START</string>
+    <string name="app_word">単語一覧</string>
+    <string name="app_std">学習状況</string>
+    <string name="test_title">Title</string>
+    <string name="back_title">タイトルへ戻る</string>
+    <string name="next_q">次の問題</string>
+    <string name="cotegory">カテゴリ別</string>
+    <string name="std_goal">学習目標</string>
+
 </resources>
