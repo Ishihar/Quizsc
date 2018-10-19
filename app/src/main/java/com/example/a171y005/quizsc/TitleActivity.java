@@ -1,8 +1,5 @@
 package com.example.a171y005.quizsc;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -17,10 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Calendar;
 import java.util.StringTokenizer;
-
-import static android.R.attr.value;
 
 
 public class TitleActivity extends AppCompatActivity {
@@ -41,7 +35,7 @@ public class TitleActivity extends AppCompatActivity {
         Insert_data("F");
     }
 
-    @Override
+   /* @Override
     protected void onDestroy() {
         super.onDestroy();
         int mNotificationId = 001;
@@ -61,7 +55,7 @@ public class TitleActivity extends AppCompatActivity {
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, init_alarm, contentIntent);
-    }
+    }*/
 
 
     public void onClick(View v) {
