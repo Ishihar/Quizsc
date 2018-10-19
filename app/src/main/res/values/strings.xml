@@ -8,6 +8,7 @@
         <item>動物</item>
         <item>宇宙</item>
         <item>食べ物</item>
+        <item> </item>
     </string-array>
 
     <string name="app_title">英単語学習</string>

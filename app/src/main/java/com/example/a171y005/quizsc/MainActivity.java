@@ -362,6 +362,11 @@ public class MainActivity extends AppCompatActivity {
                 return "宇宙";
             case "quiz_table_F":
                 return "食べ物";
+            case "quiz_table_IT":
+                TextView text_it = (TextView)findViewById(R.id.textQuestion);
+                text_it.setTextSize(28);
+                setTitle("IT(経営・組織論)");
+                return "IT";
         }
         return "選択なし";
     }

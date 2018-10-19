@@ -33,6 +33,7 @@ public class TitleActivity extends AppCompatActivity {
         Insert_data("A");
         Insert_data("C");
         Insert_data("F");
+        Insert_data("IT");
     }
 
    /* @Override
@@ -82,6 +83,9 @@ public class TitleActivity extends AppCompatActivity {
                     break;
                 case "食べ物":
                     cate = "quiz_table_F";
+                    break;
+                default:
+                    cate = "quiz_table_IT";
                     break;
             }
             // MainActivityに取得したTableNameをput

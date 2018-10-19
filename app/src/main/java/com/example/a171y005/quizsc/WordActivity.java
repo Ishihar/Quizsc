@@ -110,7 +110,6 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onCreateContextMenu(menu, v, menuInfo);
 
         if(v.getId() == R.id.listview){
-            menu.setHeaderTitle("選択");
             menu.add(0,0,0,"削除");
         }
     }

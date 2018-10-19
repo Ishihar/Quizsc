@@ -61,14 +61,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "_id integer primary key autoincrement not null, "
                         + "cnt real,"
                         + "Category text);");
-
-       /* db.execSQL("Insert into quiz_log(cnt,Category) values(7,'ビジネス')");
-        db.execSQL("Insert into quiz_log(cnt,Category) values(9,'生活')");
-        db.execSQL("Insert into quiz_log(cnt,Category) values(9,'動物')");
-        db.execSQL("Insert into quiz_log(cnt,Category) values(8,'宇宙')");
-        db.execSQL("Insert into quiz_log(cnt,Category) values(7,'食べ物')");*/
-
-
+        // 隠しテーブル
+        db.execSQL(
+                "Create table quiz_table_IT("
+                        + "_id integer primary key autoincrement not null, "
+                        + "Title text ,"
+                        + "Ans text"
+                        + ");");
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 
