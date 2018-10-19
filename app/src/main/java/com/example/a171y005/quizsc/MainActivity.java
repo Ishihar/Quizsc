@@ -57,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         setTitle("英単語学習(" + set_Title(DB_TableName) + ")");
 
         // テーブルから全単語の数を取得
-        c = db.rawQuery("select count(*) from " + DB_TableName, null);
+        c = db.rawQuery("select * from " + DB_TableName, null);
         c.moveToFirst();
 
         // データの全件数をTotalcountに代入する
-        Totalcount = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
+        Totalcount = c.getCount();
         Log.d("Main_Status",set_Title(DB_TableName) + "カテゴリの単語数は" + Totalcount + "です。");
 
         // 選択肢id配列の作成（1~全件数）

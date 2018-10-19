@@ -30,20 +30,12 @@ import static com.example.a171y005.quizsc.R.id.Show_word;
 
 public class WordActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    // 単語一覧表示の為のリスト
     private ArrayList<HashMap<String,String>> list_data;
-    // リストにセットするAdapter
     private SimpleAdapter sim;
-    // 単語追加や削除に使用するTitle,検索キーワードを格納するsearch
     private String title,search = "";
-    // カテゴリ別のテーブル名を格納する（初期設定はビジネステーブル)
     private String DB_Table_Name = "quiz_table_B";
-    // リスト表示から何番が削除されたかを格納するpos
-    // 単語追加ダイアログに選択されたカテゴリを保持するsppos
-    private int pos,sppos=0;
-    // 単語一覧を表示する為のマップ
+    private int pos;
     private HashMap<String,String> hashMap = new HashMap<String, String>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +104,8 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
-        @Override
-        // ListViewのメニュー作成
+    @Override
+    // ListViewのメニュー作成
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
@@ -128,46 +120,40 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
         // 削除ボタンが押されたとき
         // リストに登録されている「単語,意味」のセットから単語と意味の切り出し
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            AlertDialog.Builder builder = new AlertDialog.Builder(WordActivity.this);
-            int cnt = 0;
-            // title={main=単語, right=意味}というデータが代入される
-            title = sim.getItem(info.position).toString();
-            // 単語抽出の為のfor文
-            // データの長さ分[,]があるまで1文字ずつ検査する
-            for (int i = 0; i < title.length(); i++) {
-                String check = title.substring(i, i + 1);
-                if (check.equals(",")) {
-                    break;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        AlertDialog.Builder builder = new AlertDialog.Builder(WordActivity.this);
+        int cnt = 0;
+        title = sim.getItem(info.position).toString();
+        for (int i = 0; i < title.length(); i++) {
+            String check = title.substring(i, i + 1);
+            if (check.equals(",")) {
+                break;
+            }
+            cnt++;
+        }
+        title = title.substring(6, cnt);
+        pos = info.position;
+
+        if (item.getItemId() == 0) {
+            builder.setTitle("単語削除");
+            builder.setMessage(title + "を削除します。");
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Cursor c_delete;
+                    DatabaseHelper dbHelper = new DatabaseHelper(WordActivity.this);
+                    SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                    c_delete = db.rawQuery("Delete from " + DB_Table_Name + " where Title = '" + title + "';", null);
+                    c_delete.moveToFirst();
+                    list_data.remove(pos);
+                    sim.notifyDataSetChanged();
                 }
-                // [,]までの文字数をカウントしておく
-                cnt++;
-            }
-            // 単語部分の抽出
-            // [{main=]という開始5文字は不要なので6文字目から[,]までのカウント数を切り出す
-            title = title.substring(6, cnt);
-            pos = info.position;
+            }).setNegativeButton("キャンセル", null).show();
 
-            if (item.getItemId() == 0) {
-                builder.setTitle("単語削除");
-                builder.setMessage(title + "を削除します。");
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Cursor c_delete;
-                        DatabaseHelper dbHelper = new DatabaseHelper(WordActivity.this);
-                        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-                        c_delete = db.rawQuery("Delete from " + DB_Table_Name + " where Title = '" + title + "';", null);
-                        c_delete.moveToFirst();
-                        list_data.remove(pos);
-                        sim.notifyDataSetChanged();
-                    }
-                }).setNegativeButton("キャンセル", null).show();
-
-                return true;
-            }
+            return true;
+        }
         return super.onContextItemSelected(item);
     }
 
@@ -184,86 +170,75 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         return true;
     }
 
-  @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
-      //Toolbarのメニューが押されたとき
-      switch (item.getItemId()) {
-          // addボタンが押されたとき
-          case R.id.action_settings:
-              wordset("","");
+        //Toolbarのメニューが押されたとき
+        switch (item.getItemId()) {
+            // addボタンが押されたとき
+            case R.id.action_settings:
+                LayoutInflater factory = LayoutInflater.from(this);
+                final View edit_view = factory.inflate(R.layout.addlayout, null);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(WordActivity.this);
+                dialog.setView(edit_view);
+                dialog.setTitle("単語追加");
 
-          // Spinnerからビジネスを選択
-          case R.id.item2:
-              setTitle("単語一覧(ビジネス)");
-              // テーブル名の設定
-              DB_Table_Name = "quiz_table_B";
-              // カテゴリを指定してリストを再表示
-              ShowListView(search,DB_Table_Name);
-              break;
+                // 単語追加ダイアログ内の設定
+                dialog.setPositiveButton("追加", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // カテゴリ選択用のSpinner
+                        Spinner spinner = (Spinner) edit_view.findViewById(R.id.spinner2);
+                        String catename = spinner.getSelectedItem().toString();
 
-          // Spinnerから生活を選択
-          case R.id.item3:
-              setTitle("単語一覧(生活)");
-              DB_Table_Name = "quiz_table_L";
-              ShowListView(search,DB_Table_Name);
-              break;
-          // Spinnerから動物を選択
-          case R.id.item4:
-              setTitle("単語一覧(動物)");
-              DB_Table_Name = "quiz_table_A";
-              ShowListView(search,DB_Table_Name);
-              break;
-          // Spinnerから宇宙を選択
-          case R.id.item5:
-              setTitle("単語一覧(宇宙)");
-              DB_Table_Name = "quiz_table_C";
-              ShowListView(search,DB_Table_Name);
-              break;
-          // Spinnerから食べ物を選択
-          case R.id.item6:
-              setTitle("単語一覧(食べ物)");
-              DB_Table_Name = "quiz_table_F";
-              ShowListView(search,DB_Table_Name);
-              break;
-      }
+                        // 単語とその意味の入力欄
+                        EditText edit_Text = (EditText) edit_view.findViewById(R.id.EditWord);
+                        EditText edit_mean = (EditText) edit_view.findViewById(R.id.EditMean);
+                        String editw = edit_Text.getText().toString();
+                        String editm = edit_mean.getText().toString();
 
-      return super.onOptionsItemSelected(item);
-  }
+                        // 3つのデータを引き渡し
+                        add_mod(editw, editm,catename);
+                    }
+                });
+                dialog.show();
 
-    private void wordset(String s, String s1) {
-        LayoutInflater factory = LayoutInflater.from(this);
-        final View edit_view = factory.inflate(R.layout.addlayout, null);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(WordActivity.this);
-        dialog.setView(edit_view);
-        dialog.setTitle("単語追加");
-        final Spinner spinner = (Spinner) edit_view.findViewById(R.id.spinner2);
-        final EditText edit_Text = (EditText) edit_view.findViewById(R.id.EditWord);
-        final EditText edit_mean = (EditText) edit_view.findViewById(R.id.EditMean);
-        spinner.setSelection(sppos);
-        edit_Text.setText(s);
-        edit_mean.setText(s1);
+                // Spinnerからビジネスを選択
+            case R.id.item2:
+                setTitle("単語一覧(ビジネス)");
+                // テーブル名の設定
+                DB_Table_Name = "quiz_table_B";
+                // カテゴリを指定してリストを再表示
+                ShowListView(search,DB_Table_Name);
+                break;
 
+            // Spinnerから生活を選択
+            case R.id.item3:
+                setTitle("単語一覧(生活)");
+                DB_Table_Name = "quiz_table_L";
+                ShowListView(search,DB_Table_Name);
+                break;
+            // Spinnerから動物を選択
+            case R.id.item4:
+                setTitle("単語一覧(動物)");
+                DB_Table_Name = "quiz_table_A";
+                ShowListView(search,DB_Table_Name);
+                break;
+            // Spinnerから宇宙を選択
+            case R.id.item5:
+                setTitle("単語一覧(宇宙)");
+                DB_Table_Name = "quiz_table_C";
+                ShowListView(search,DB_Table_Name);
+                break;
+            // Spinnerから食べ物を選択
+            case R.id.item6:
+                setTitle("単語一覧(食べ物)");
+                DB_Table_Name = "quiz_table_F";
+                ShowListView(search,DB_Table_Name);
+                break;
+        }
 
-
-        // 単語追加ダイアログ内の設定
-        dialog.setPositiveButton("追加", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // カテゴリ選択用のSpinner
-                String catename = spinner.getSelectedItem().toString();
-
-                // 単語とその意味の入力欄
-                String editw = edit_Text.getText().toString();
-                String editm = edit_mean.getText().toString();
-
-                // 3つのデータを引き渡し
-                add_mod(editw, editm,catename);
-            }
-        });
-        dialog.show();
-
+        return super.onOptionsItemSelected(item);
     }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -299,23 +274,18 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
 
             case "ビジネス":
                 tablename = "quiz_table_B";
-                sppos = 1;
                 break;
             case "生活":
                 tablename = "quiz_table_L";
-                sppos = 2;
                 break;
             case "動物":
                 tablename = "quiz_table_A";
-                sppos = 3;
                 break;
             case "宇宙":
                 tablename = "quiz_table_C";
-                sppos = 4;
                 break;
             case "食べ物":
                 tablename = "quiz_table_F";
-                sppos = 5;
                 break;
         }
         // 追加される単語が選択されたカテゴリに既に登録されているかチェック
@@ -330,9 +300,8 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
             check = edit_w.substring(i, i + 1);
 
             // アルファベット以外の文字が検出された場合
-            if (check.matches("[^a-zA-Z]")) {
-                Toast.makeText(WordActivity.this, "単語入力欄にアルファベット以外の文字が入力されています。", Toast.LENGTH_LONG).show();
-                wordset(edit_w, edit_m);
+            if (check.matches("[^a-zA-z]")) {
+                Toast.makeText(WordActivity.this, "アルファベット以外の文字が入力されています。", Toast.LENGTH_LONG).show();
                 return;
             }
         }
@@ -340,14 +309,13 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         // 追加される単語をDBで検索をかけデータ件数が1件以上出力された場合
         if (count >= 1) {
             message = edit_w + "は既に登録されています。" + "\n" + "登録内容:" + anser;
-
+            builder.setMessage(message);
         }
         else {
             db.execSQL("Insert into " + tablename + " (Title,Ans) values('" + edit_w + "','" + edit_m + "');");
-            message = edit_w + "\n" + catename + "カテゴリに登録しました。";
+            builder.setMessage(edit_w + "\n" + catename + "カテゴリに登録しました。");
         }
         builder.setTitle("単語登録");
-        builder.setMessage(message);
         builder.setPositiveButton("OK", null);
         builder.show();
         c.close();

@@ -46,21 +46,21 @@ public class LogActivity extends AppCompatActivity {
 
         // 各カテゴリから学習件数を取得
         try {
-            c = db.rawQuery("Select count(*) from quiz_log where Category = 'ビジネス';", null);
+            c = db.rawQuery("Select * from quiz_log where Category = 'ビジネス';", null);
             c.moveToFirst();
-            cnt_b = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-            c = db.rawQuery("Select count(*) from quiz_log where Category = '生活';", null);
+            cnt_b = c.getCount();
+            c = db.rawQuery("Select * from quiz_log where Category = '生活';", null);
             c.moveToFirst();
-            cnt_l = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-            c = db.rawQuery("Select count(*) from quiz_log where Category = '動物';", null);
+            cnt_l = c.getCount();
+            c = db.rawQuery("Select * from quiz_log where Category = '動物';", null);
             c.moveToFirst();
-            cnt_a = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-            c = db.rawQuery("Select count(*) from quiz_log where Category = '宇宙';", null);
+            cnt_a = c.getCount();
+            c = db.rawQuery("Select * from quiz_log where Category = '宇宙';", null);
             c.moveToFirst();
-            cnt_c = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
-            c = db.rawQuery("Select count(*) from quiz_log where Category = '食べ物';", null);
+            cnt_c = c.getCount();
+            c = db.rawQuery("Select * from quiz_log where Category = '食べ物';", null);
             c.moveToFirst();
-            cnt_f = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
+            cnt_f = c.getCount();
         } catch (Exception e) {
             return;
         }

@@ -115,11 +115,11 @@ public class TitleActivity extends AppCompatActivity {
         Cursor c;
 
 
-        c = db.rawQuery("Select count(*) from quiz_table_" + cate + ";", null);
+        c = db.rawQuery("Select * from quiz_table_" + cate + ";", null);
         c.moveToFirst();
 
         // データ件数が0件だった場合Insert
-        int count = Integer.parseInt(c.getString(c.getColumnIndex("count(*)")));
+        int count = c.getCount();
         if (count == 0) {
             try {
                 // /main/assets/worddata.csvを取得

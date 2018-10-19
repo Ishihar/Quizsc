@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item1"
-        android:title="キャッシュクリア"
+        android:title="学習履歴削除"
         android:orderInCategory="100"/>
 </menu>
