@@ -19,8 +19,6 @@ import java.util.StringTokenizer;
 
 public class TitleActivity extends AppCompatActivity {
 
-    private boolean set24;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +122,7 @@ public class TitleActivity extends AppCompatActivity {
                 InputStream is = getResources().getAssets().open("worddata-" + cate + ".csv");
                 InputStreamReader inputStreamReader = new InputStreamReader(is);
                 BufferedReader bf = new BufferedReader(inputStreamReader);
-                String line = "";
+                String line;
                 try {
                     while ((line = bf.readLine()) != null) {
                         StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
@@ -137,7 +135,7 @@ public class TitleActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            return;
+            c.close();
         }
     }
 }
