@@ -3,33 +3,40 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/item1"
-        android:title="カテゴリ選択"
+        android:title="@string/cate_select"
         android:orderInCategory="100"
         android:enabled="true"
         app:showAsAction="never"/>
     <item
         android:id="@+id/item2"
-        android:title="ビジネス"
+        android:title="@string/cate_b"
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item
         android:id="@+id/item3"
-        android:title="生活"
+        android:title="@string/cate_l"
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item
         android:id="@+id/item4"
-        android:title="動物"
+        android:title="@string/cate_a"
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item
         android:id="@+id/item5"
-        android:title="宇宙"
+        android:title="@string/cate_c"
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item
         android:id="@+id/item6"
-        android:title="食べ物"
+        android:title="@string/cate_f"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/item7"
+        android:title="@string/cate_it"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
 </menu>

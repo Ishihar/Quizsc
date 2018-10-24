@@ -19,6 +19,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private ArrayList<HashMap<String,String>> list_data;
     private SimpleAdapter sim;
+    private GetCategoryName mGetCategoryName = new GetCategoryName();
 
 
     ArrayList<String> list = new ArrayList<>();     // MainActivityの学習結果を保存するlist
@@ -129,19 +130,6 @@ public class ResultActivity extends AppCompatActivity {
 
     // タイトルをカテゴリ別に設定
     private String set_Title(String db_tableName) {
-        switch (db_tableName){
-            case "quiz_table_B":
-                return "ビジネス";
-            case "quiz_table_L":
-                return "生活";
-            case "quiz_table_A":
-                return "動物";
-            case "quiz_table_C":
-                return "宇宙";
-            case "quiz_table_F":
-                return "食べ物";
-        }
-        return "選択なし";
+        return mGetCategoryName.getTableName(db_tableName);
     }
-
 }

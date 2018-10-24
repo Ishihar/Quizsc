@@ -19,6 +19,8 @@ import java.util.StringTokenizer;
 
 public class TitleActivity extends AppCompatActivity {
 
+    private GetCategoryName mGetCategoryName = new GetCategoryName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,35 +59,18 @@ public class TitleActivity extends AppCompatActivity {
     }*/
 
 
+
     public void onClick(View v) {
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         String cate = spinner.getSelectedItem().toString();
 
         // STARTボタンが押されたとき選択カテゴリからTable名を取得
         if (v.getId() == R.id.bt_start) {
-            switch (cate) {
-                case "問題カテゴリ選択":
-                    Toast.makeText(TitleActivity.this, "カテゴリを選択してください。", Toast.LENGTH_SHORT).show();
-                    return;
-                case "ビジネス":
-                    cate = "quiz_table_B";
-                    break;
-                case "生活":
-                    cate = "quiz_table_L";
-                    break;
-                case "動物":
-                    cate = "quiz_table_A";
-                    break;
-                case "宇宙":
-                    cate = "quiz_table_C";
-                    break;
-                case "食べ物":
-                    cate = "quiz_table_F";
-                    break;
-                default:
-                    cate = "quiz_table_IT";
-                    break;
+            if(cate.equals("問題カテゴリ選択")){
+                Toast.makeText(TitleActivity.this, "カテゴリを選択してください。", Toast.LENGTH_SHORT).show();
+                return;
             }
+            cate = mGetCategoryName.getTable(cate);
             // MainActivityに取得したTableNameをput
             Intent intent = new Intent(TitleActivity.this, MainActivity.class);
             intent.putExtra("Table_NAME", cate);
@@ -105,13 +90,13 @@ public class TitleActivity extends AppCompatActivity {
     }
 
     // 各カテゴリのデータをInsert
-    public void Insert_data(String cate) {
+    public void Insert_data(String catekey) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
 
-        c = db.rawQuery("Select * from quiz_table_" + cate + ";", null);
+        c = db.rawQuery("Select * from quiz_table_" + catekey + ";", null);
         c.moveToFirst();
 
         // データ件数が0件だった場合Insert
@@ -119,14 +104,14 @@ public class TitleActivity extends AppCompatActivity {
         if (count == 0) {
             try {
                 // /main/assets/worddata.csvを取得
-                InputStream is = getResources().getAssets().open("worddata-" + cate + ".csv");
+                InputStream is = getResources().getAssets().open("worddata-" + catekey + ".csv");
                 InputStreamReader inputStreamReader = new InputStreamReader(is);
                 BufferedReader bf = new BufferedReader(inputStreamReader);
                 String line;
                 try {
                     while ((line = bf.readLine()) != null) {
                         StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
-                        db.execSQL("insert into quiz_table_" + cate + "(Title,Ans) values('" + stringTokenizer.nextToken() + "','" + stringTokenizer.nextToken() + "');");
+                        db.execSQL("insert into quiz_table_" + catekey + "(Title,Ans) values('" + stringTokenizer.nextToken() + "','" + stringTokenizer.nextToken() + "');");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

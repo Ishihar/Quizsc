@@ -2,13 +2,13 @@
     <string name="app_name">Eng_test</string>
 
     <string-array name="list">
-        <item>問題カテゴリ選択</item>
-        <item>ビジネス</item>
-        <item>生活</item>
-        <item>動物</item>
-        <item>宇宙</item>
-        <item>食べ物</item>
-        <item> </item>
+        <item>@string/cate_select</item>
+        <item>@string/cate_b</item>
+        <item>@string/cate_l</item>
+        <item>@string/cate_a</item>
+        <item>@string/cate_c</item>
+        <item>@string/cate_f</item>
+        <item>@string/cate_it</item>
     </string-array>
 
     <string name="app_title">英単語学習</string>
@@ -20,5 +20,12 @@
     <string name="next_q">次の問題</string>
     <string name="cotegory">カテゴリ別</string>
     <string name="std_goal">学習目標</string>
+    <string name="cate_select">問題カテゴリ選択</string>
+    <string name="cate_b">ビジネス</string>
+    <string name="cate_l">生活</string>
+    <string name="cate_a">動物</string>
+    <string name="cate_c">宇宙</string>
+    <string name="cate_f">食べ物</string>
+    <string name="cate_it"> </string>
 
 </resources>

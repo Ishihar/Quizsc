@@ -36,6 +36,7 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
     private String DB_Table_Name = "quiz_table_B";
     private int pos;
     private HashMap<String,String> hashMap = new HashMap<String, String>();
+    private GetCategoryName mGetCategoryName = new GetCategoryName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,6 +235,12 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
                 DB_Table_Name = "quiz_table_F";
                 ShowListView(search,DB_Table_Name);
                 break;
+            // SpinnerからITを選択
+            case R.id.item7:
+                setTitle("IT");
+                DB_Table_Name = "quiz_table_IT";
+                ShowListView(search,DB_Table_Name);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -266,27 +273,8 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         }
 
         // 選択されたカテゴリからテーブル名を取得
-        switch (catename){
-            case "問題カテゴリ選択":
-                Toast.makeText(WordActivity.this, "問題カテゴリを選択してください。", Toast.LENGTH_LONG).show();
-                return;
+        tablename = mGetCategoryName.getTable(catename);
 
-            case "ビジネス":
-                tablename = "quiz_table_B";
-                break;
-            case "生活":
-                tablename = "quiz_table_L";
-                break;
-            case "動物":
-                tablename = "quiz_table_A";
-                break;
-            case "宇宙":
-                tablename = "quiz_table_C";
-                break;
-            case "食べ物":
-                tablename = "quiz_table_F";
-                break;
-        }
         // 追加される単語が選択されたカテゴリに既に登録されているかチェック
         c = db.rawQuery("Select count(*),Ans from " + tablename + " where Title = '" + edit_w + "';", null);
         c.moveToFirst();

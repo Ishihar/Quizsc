@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     // 正解カウント変数
     private int c_cnt = 0;
     // 出題単語を取得するためのid配列
-    private ArrayList<Integer> TitleSelection = new ArrayList<Integer>();
+    private ArrayList<Integer> TitleSelection = new ArrayList<>();
     // 選択肢を取得する為のid配列
-    private ArrayList<Integer> ChoiceSelect = new ArrayList<Integer>();
+    private ArrayList<Integer> ChoiceSelect = new ArrayList<>();
     // ResultActivityへ送信するデータリスト
     private ArrayList<String> list = new ArrayList<>();
 
@@ -308,6 +308,8 @@ public class MainActivity extends AppCompatActivity {
             int o_max = Integer.parseInt(c.getString(c.getColumnIndex("max(_id)")));
             c = db.rawQuery("update " + DB_TableName + " set _id = 1 where _id = " + o_max + ";",null);
             c.moveToFirst();
+
+            c.close();
         }
         else {
             return;
@@ -351,24 +353,7 @@ public class MainActivity extends AppCompatActivity {
 
     // タイトルをカテゴリ別に設定
     private String set_Title(String db_tableName) {
-        switch (db_tableName){
-            case "quiz_table_B":
-                return "ビジネス";
-            case "quiz_table_L":
-                return "生活";
-            case "quiz_table_A":
-                return "動物";
-            case "quiz_table_C":
-                return "宇宙";
-            case "quiz_table_F":
-                return "食べ物";
-            case "quiz_table_IT":
-                TextView text_it = (TextView)findViewById(R.id.textQuestion);
-                text_it.setTextSize(28);
-                setTitle("IT(経営・組織論)");
-                return "IT";
-        }
-        return "選択なし";
+        GetCategoryName getCategoryName = new GetCategoryName();
+        return getCategoryName.getTableName(db_tableName);
     }
-
 }
