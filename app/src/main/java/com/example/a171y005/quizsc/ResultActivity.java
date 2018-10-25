@@ -130,6 +130,6 @@ public class ResultActivity extends AppCompatActivity {
 
     // タイトルをカテゴリ別に設定
     private String set_Title(String db_tableName) {
-        return mGetCategoryName.getTableName(db_tableName);
+        return mGetCategoryName.getCategoryName(db_tableName);
     }
 }
