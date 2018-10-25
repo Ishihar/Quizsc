@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
 
+        // 選択されたidのAnsを取得
         c = db.rawQuery("select Ans from " + DB_TableName + " where _id =" + SelectAns, null);
         c.moveToFirst();
 
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             // 正解数を送信リストに追加
             list.add(String.valueOf(c_cnt));
 
-            // 結果画面へ遷移
+            // 1000ミリ秒後,結果画面へ遷移
             handle.postDelayed(new Runnable() {
                                    @Override
                                    public void run() {
@@ -354,6 +355,6 @@ public class MainActivity extends AppCompatActivity {
     // タイトルをカテゴリ別に設定
     private String set_Title(String db_tableName) {
         GetCategoryName getCategoryName = new GetCategoryName();
-        return getCategoryName.getTableName(db_tableName);
+        return getCategoryName.getCategoryName(db_tableName);
     }
 }

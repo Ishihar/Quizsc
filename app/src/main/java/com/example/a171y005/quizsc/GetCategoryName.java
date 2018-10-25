@@ -24,7 +24,7 @@ public class GetCategoryName {
         }
         return tablename;
     }
-    public String getTableName(String catename){
+    public String getCategoryName(String catename){
         switch (catename) {
             case "quiz_table_B":
                 catename = "ビジネス";
