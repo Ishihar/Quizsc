@@ -110,7 +110,7 @@ public class LogActivity extends AppCompatActivity {
                 tv_2.setText("最高平均正解数\n  " + max_name + ": " + format("%.2f", max));
                 tv_3.setText("最低平均正解数\n  " + min_name + ": " + format("%.2f", min));
             } catch (Exception e) {
-                tv_2.setText("学習状況を取得できません。");
+                tv_2.setText(" ");
             }
             set_Goal(total, max, min);
             // 学習件数が1件もなかったとき初期表示
