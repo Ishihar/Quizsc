@@ -18,7 +18,7 @@ public class GetCategoryName {
             case "食べ物":
                 tablename = "quiz_table_F";
                 break;
-            case " ":
+            case "IT":
                 tablename = "quiz_table_IT";
                 break;
         }

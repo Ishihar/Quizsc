@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> ChoiceSelect = new ArrayList<>();
     // ResultActivityへ送信するデータリスト
     private ArrayList<String> list = new ArrayList<>();
+    // ITカテゴリによってテキストサイズを変更するかの判定
+    private boolean fontsize = false;
 
+    // Activityが初めて生成された時の処理
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         // TitleActivityからカテゴリ別テーブル名を取得
         DB_TableName = getIntent().getStringExtra("Table_NAME");
+
+        if(DB_TableName.equals("quiz_table_IT"))
+            fontsize = true;
 
         // カテゴリ別タイトルの設定
         setTitle("英単語学習(" + set_Title(DB_TableName) + ")");
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             TitleSelection.add(i);
         }
 
+        // クローズ処理
         c.close();
 
         // 出題用id配列のシャッフル
@@ -91,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setQuestion(){
+        // DBとカーソルの呼び出し
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c;
@@ -118,13 +126,15 @@ public class MainActivity extends AppCompatActivity {
         SelectAns3 = ChoiceSelect.get(2);
 
         // 同じ選択肢が2つ発生しないように答え以外の3つの選択肢番号と出題番号が同じでないかチェック
-        // 同じだった場合、4つ目のChoiceSelectデータを取得
+        // 同じだった場合、要素を1つずらし4つ目のChoiceSelectデータを取得
         if(SelectQuestion == ChoiceSelect.get(0))
             SelectAns1 = ChoiceSelect.get(3);
         else if(SelectQuestion == ChoiceSelect.get(1))
             SelectAns2 = ChoiceSelect.get(3);
         else if(SelectQuestion == ChoiceSelect.get(2))
             SelectAns3 = ChoiceSelect.get(3);
+
+        // Logcatに出力
         Log.d("Main_Status","3つの選択肢IDは " + SelectAns1 + "," + SelectAns2 + "," + SelectAns3 + " です。");
 
         // DBからTitle,Ansを取得し結果表示用配列listに代入
@@ -132,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
         Anser = c.getString(c.getColumnIndex("Ans"));
         list.add(Title);
         list.add(Anser);
+
+        // Logcatに出力
         Log.d("Main_Status","出題される単語は " + Title + " です。その意味は " + Anser + " です。");
         Log.d("Main_Status"," ");
 
@@ -145,12 +157,14 @@ public class MainActivity extends AppCompatActivity {
 
         // ボタンに選択肢をセット
         ((TextView)findViewById(R.id.textQuestion_Res)).setText(cntQuestion + 1 + " / 10");
+        if(fontsize)((TextView)findViewById(R.id.textQuestion)).setTextSize(30);
         ((TextView)findViewById(R.id.textQuestion)).setText(Title);
         ((Button)findViewById(R.id.button1)).setText(RandomChoice.get(0));
         ((Button)findViewById(R.id.button2)).setText(RandomChoice.get(1));
         ((Button)findViewById(R.id.button3)).setText(RandomChoice.get(2));
         ((Button)findViewById(R.id.button4)).setText(RandomChoice.get(3));
 
+        // クローズ処理
         c.close();
         db.close();
     }
@@ -184,18 +198,39 @@ public class MainActivity extends AppCompatActivity {
         final Button bt3 = (Button)(findViewById(R.id.button3));
         final Button bt4 = (Button)(findViewById(R.id.button4));
 
-        // どれかボタンが押された場合1000ミリ秒Enableする（結果表示の為）
+        // いずれかのボタンが押された場合1000ミリ秒Enableする（結果表示の為）
         bt1.setEnabled(false);bt2.setEnabled(false);bt3.setEnabled(false);bt4.setEnabled(false);
 
         // 選択したボタンの枠線を赤色表示
         bt.setBackgroundResource(R.drawable.change);
 
-        // 〇×表示
+        // 〇×表示する為の領域の宣言
         final ImageView iv = new ImageView(this);
-        // XYを指定して表示
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(500,500);
-        lp.leftMargin = 145;
-        lp.topMargin = 3;
+
+        // 画像の大きさを指定
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(260,260);
+
+        // XY座標を指定して表示
+        /*int y = 0;
+        if(bt.getId() == R.id.button1){
+            y = 30;
+        }
+        else if(bt.getId() == R.id.button2){
+            y = 50;
+        }
+        else if(bt.getId() == R.id.button3){
+            y = 70;
+        }
+        else if(bt.getId() == R.id.button4){
+            y = 90;
+        }*/
+
+        int left = bt.getLeft();
+        int top = bt.getTop();
+        Log.d("Main_Status","押されたボタンのleftは " + left + " です。");
+        Log.d("Main_Status","押されたボタンのtopは " + top + " です。");
+        lp.leftMargin = 270;
+        lp.topMargin = top + 380;
 
         Handler handle = new Handler();
 

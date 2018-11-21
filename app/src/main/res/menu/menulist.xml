@@ -35,7 +35,7 @@
 
     <item
         android:id="@+id/item7"
-        android:title="@string/cate_it"
+        android:title=" "
         android:orderInCategory="100"
         app:showAsAction="never"/>
 
