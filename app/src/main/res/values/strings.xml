@@ -20,7 +20,7 @@
     <string name="next_q">次の問題</string>
     <string name="cotegory">カテゴリ別</string>
     <string name="std_goal">学習目標</string>
-    <string name="cate_select">問題カテゴリ選択</string>
+    <string name="cate_select">問題カテゴリを選択してください</string>
     <string name="cate_b">ビジネス</string>
     <string name="cate_l">生活</string>
     <string name="cate_a">動物</string>

@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "_id integer primary key autoincrement not null, "
                         + "cnt real,"
                         + "Category text);");
-        // 隠しテーブル
+        // ITテーブル
         db.execSQL(
                 "Create table quiz_table_IT("
                         + "_id integer primary key autoincrement not null, "

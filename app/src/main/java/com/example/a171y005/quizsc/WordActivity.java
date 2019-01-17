@@ -275,6 +275,13 @@ public class WordActivity extends AppCompatActivity implements SearchView.OnQuer
         // 選択されたカテゴリからテーブル名を取得
         tablename = mGetCategoryName.getTable(catename);
 
+
+        // カテゴリが選択されていない場合
+        if(tablename.equals("問題カテゴリを選択してください")) {
+            Toast.makeText(WordActivity.this, "カテゴリを選択してください。", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // 追加される単語が選択されたカテゴリに既に登録されているかチェック
         c = db.rawQuery("Select count(*),Ans from " + tablename + " where Title = '" + edit_w + "';", null);
         c.moveToFirst();

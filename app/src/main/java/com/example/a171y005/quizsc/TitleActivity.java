@@ -66,7 +66,7 @@ public class TitleActivity extends AppCompatActivity {
 
         // STARTボタンが押されたとき選択カテゴリからTable名を取得
         if (v.getId() == R.id.bt_start) {
-            if(cate.equals("問題カテゴリ選択")){
+            if(cate.equals("問題カテゴリを選択してください")){
                 Toast.makeText(TitleActivity.this, "カテゴリを選択してください。", Toast.LENGTH_SHORT).show();
                 return;
             }

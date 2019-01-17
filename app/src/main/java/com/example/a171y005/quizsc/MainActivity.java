@@ -211,24 +211,7 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(260,260);
 
         // XY座標を指定して表示
-        /*int y = 0;
-        if(bt.getId() == R.id.button1){
-            y = 30;
-        }
-        else if(bt.getId() == R.id.button2){
-            y = 50;
-        }
-        else if(bt.getId() == R.id.button3){
-            y = 70;
-        }
-        else if(bt.getId() == R.id.button4){
-            y = 90;
-        }*/
-
-        int left = bt.getLeft();
         int top = bt.getTop();
-        Log.d("Main_Status","押されたボタンのleftは " + left + " です。");
-        Log.d("Main_Status","押されたボタンのtopは " + top + " です。");
         lp.leftMargin = 270;
         lp.topMargin = top + 380;
 
