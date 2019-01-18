@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/item1"
-        android:title="@string/cate_select"
-        android:orderInCategory="100"
-        android:enabled="true"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group_0">
     <item
         android:id="@+id/item2"
-        android:title="@string/cate_b"
+        android:icon="@drawable/normal"
         android:orderInCategory="100"
-        app:showAsAction="never"/>
+        android:title="@string/cate_b"
+        app:showAsAction="never"
+        />
+    </group>
+    <group android:id="@+id/group_1">
     <item
         android:id="@+id/item3"
         android:title="@string/cate_l"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    </group>
+    <group android:id="@+id/group_2">
     <item
         android:id="@+id/item4"
         android:title="@string/cate_a"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    </group>
+    <group android:id="@+id/group_3">
     <item
         android:id="@+id/item5"
         android:title="@string/cate_c"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    </group>
+    <group android:id="@+id/group_4">
     <item
         android:id="@+id/item6"
         android:title="@string/cate_f"
         android:orderInCategory="100"
         app:showAsAction="never"/>
-
+    </group>
+    <group android:id="@+id/group_5">
     <item
         android:id="@+id/item7"
-        android:title=" "
         android:orderInCategory="100"
+        android:title="@string/cate_it"
         app:showAsAction="never"/>
-
+    </group>
 </menu>

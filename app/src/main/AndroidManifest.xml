@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/baseline_public_black_48dp"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_title"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight">
@@ -25,8 +25,8 @@
         <activity android:name=".LogActivity">
         </activity>
         <receiver
-            android:name="AlarmReceiver"
-            android:process=":remote"/>
+        android:name="AlarmReceiver"
+        android:process=":remote"/>
 
     </application>
 

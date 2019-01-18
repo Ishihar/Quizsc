@@ -18,7 +18,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="27dp"
-            android:background="@mipmap/spinner9"
+            android:background="@mipmap/spinner12"
             android:entries="@array/list"
             android:popupBackground="@drawable/simple"
             app:layout_constraintBottom_toTopOf="@+id/bt_start"
